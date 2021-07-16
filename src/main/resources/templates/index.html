@@ -47,7 +47,7 @@ h1 {
         <tr th:each="expense : ${expenseList}">
             <td th:text="${expense.id}">Expense ID</td>
             <td th:text="${expense.description}">Description</td>
-            <td th:text="${expense.expenseDate}">Expense date</td>
+            <td th:text="${#dates.format(expense.expenseDate, 'yyyy-MM-dd')}">Expense date</td>
             <td th:text="${expense.amount}">Amount</td>
             <td th:text="${expense.expenseType.label}">Expense type</td>
             <td>
