@@ -4,15 +4,37 @@
 <head>
     <meta charset="utf-8"/>
     <title>Expense Manager</title>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script-->
+<style>
+body {
+  background-color: linen;
+}
+
+h1 {
+  color: maroon;
+  margin-left: 40px;
+  }
+
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff; /* Белый цвет текста */
+    padding: 0.7rem 1.05rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+</style>
 </head>
 <body>
 <div align="center">
-    <h1>Expense List</h1>
-    <a href="new">Create new expense</a>
+    <h1>Expense list</h1>
+    <hr>
+     <a href="new" class="btn">Create new expense</a>
     <br/><br/>
-    <table border="1" cellpadding="10">
+    <table border="0" cellpadding="10" class="table table-striped" style="width:50%;align:center;">
         <thead>
-        <tr>
+        <tr >
             <th>Expense ID</th>
             <th>Description</th>
             <th>Expense date</th>
@@ -27,11 +49,11 @@
             <td th:text="${expense.description}">Description</td>
             <td th:text="${expense.expenseDate}">Expense date</td>
             <td th:text="${expense.amount}">Amount</td>
-            <td th:text="${expense.expenseType}">Expense type</td>
+            <td th:text="${expense.expenseType.label}">Expense type</td>
             <td>
-                <a th:href="@{'/edit/' + ${expense.id}}">Edit</a>
-                &nbsp;&nbsp;&nbsp;
-                <a th:href="@{'/delete/' + ${expense.id}}">Delete</a>
+                <a th:href="@{'/edit/' + ${expense.id}}" class="btn">Edit</a>
+
+                <a th:href="@{'/delete/' + ${expense.id}}" class="btn">Delete</a>
             </td>
         </tr>
         </tbody>

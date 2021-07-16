@@ -4,6 +4,23 @@
 <head>
     <meta charset="utf-8" />
     <title>Edit Expense</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+
+
+h1 {
+  color: maroon;
+  margin-left: 40px;
+  }
+        .btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff; /* Белый цвет текста */
+    padding: 0.7rem 1.05rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+    </style>
 </head>
 <body>
 <div align="center">
@@ -12,7 +29,7 @@
     <form action="#" th:action="@{/save}" th:object="${expense}"
           method="post">
 
-        <table border="0" cellpadding="10">
+        <table border="0" cellpadding="10" class="table" style="width:30%;align:center;">
             <tr>
                 <td>Expense ID:</td>
                 <td>
@@ -21,24 +38,33 @@
             </tr>
             <tr>
                 <td>Expense description:</td>
-                <td>
-                    <input type="text" th:field="*{description}" />
-                </td>
+                <td><input type="text" th:field="*{description}" /></td>
+                <td th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</td>
             </tr>
             <tr>
                 <td>Expense date:</td>
                 <td><input type="date" th:field="*{expenseDate}" /></td>
+                <td th:if="${#fields.hasErrors('expenseDate')}" th:errors="*{expenseDate}">ExpenseDate Error</td>
             </tr>
             <tr>
                 <td>Amount:</td>
                 <td><input type="text" th:field="*{amount}" /></td>
+                <td th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount Error</td>
             </tr>
             <tr>
                 <td>Expense type:</td>
-                <td><input type="text" th:field="*{expenseType}" /></td>
+                <td>
+                <select name="expenseType">
+                    <option th:each="type : ${T(study.example.ExpenseType).values()}"
+                            th:value="${type}" th:text="${type}"></option>
+                </select>
+                </td>
             </tr>
             <tr>
-                <td colspan="2"><button type="submit">Save</button> </td>
+                <td colspan="2"><button type="submit" class="btn">Save</button> </td>
+            </tr>
+            <tr>
+                <td colspan="2"><a th:href="@{'/'}" class="btn">Back to expenses list</a></td>
             </tr>
         </table>
     </form>

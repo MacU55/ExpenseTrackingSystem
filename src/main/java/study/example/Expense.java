@@ -3,6 +3,7 @@ package study.example;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,22 +18,32 @@ public class Expense {
     private Long id;
 
     @Column(name="description")
+    @NotBlank (message = "Please fill in 'Expense description' ")
     private String description;
 
+
     @Column(name="expenseDate")
+    @NotNull (message = "Expense date must not be empty")
+    @PastOrPresent (message = "Expense date must be in past or in present")
+    @Basic
+
     @DateTimeFormat (pattern = "yyyy-MM-dd")
     private Date expenseDate;
 
     @Column(name="amount")
-    private float amount;
+    @NotNull (message = "amount must not be empty")
+    @DecimalMin (value = "0.00", message = "amount should not be greater than 0")
+    @Digits(integer=3, fraction=2, message = "integer part is 3 digits and fraction part is 2 digits")
+    private BigDecimal amount;
 
     @Column(name="expenseType")
-    private String expenseType;
+    @Enumerated(EnumType.STRING)
+    private ExpenseType expenseType;
 
     protected Expense() {
     }
 
-    protected Expense(Long id, String description, Date expenseDate, float amount, String expenseType) {
+    protected Expense(Long id, String description, Date expenseDate, BigDecimal amount, ExpenseType expenseType) {
         super();
         this.id = id;
         this.description = description;
@@ -40,8 +51,6 @@ public class Expense {
         this.amount = amount;
         this.expenseType = expenseType;
     }
-
-
 
     public Long getId() {
         return id;
@@ -67,19 +76,19 @@ public class Expense {
         this.expenseDate = expenseDate;
     }
 
-    public float getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public String getExpenseType() {
+    public ExpenseType getExpenseType() {
         return expenseType;
     }
 
-    public void setExpenseType(String expenseType) {
+    public void setExpenseType(ExpenseType expenseType) {
         this.expenseType = expenseType;
     }
 }
