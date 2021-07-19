@@ -15,9 +15,7 @@
     </parent>
 
     <properties>
-        <slf4jVersion>1.7.25</slf4jVersion>
-        <slf4j-log4j12Version>1.7.25</slf4j-log4j12Version>
-        <hibernate-validatorVersion>6.0.13.Final</hibernate-validatorVersion>
+         <hibernate-validatorVersion>6.0.13.Final</hibernate-validatorVersion>
         <javax.validationVersion>2.0.1.Final</javax.validationVersion>
         <spring-boot-maven-pluginVersion>2.5.2</spring-boot-maven-pluginVersion>
         <thymeleafVersion>3.0.11.RELEASE</thymeleafVersion>
@@ -72,17 +70,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- thymeleaf-->
-        <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf</artifactId>
-            <version>3.0.11.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
-            <version>3.0.11.RELEASE</version>
-        </dependency>
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-java8time</artifactId>
@@ -93,12 +80,23 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4jVersion}</version>
+            <version>1.7.6</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j-log4j12Version}</version>
+            <version>1.7.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.5</version>
         </dependency>
 
         <!-- 2 validation dependency-->
