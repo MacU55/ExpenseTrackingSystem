@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -25,7 +27,7 @@ public class Expense {
     @NotNull (message = "Expense date must not be empty")
     @PastOrPresent (message = "Expense date must be in past or in present")
     @DateTimeFormat (pattern = "yyyy-MM-dd")
-    private Date expenseDate;
+    private LocalDate expenseDate = LocalDate.now(ZoneId.of( "Europe/Kiev" ));
 
     @Column(name="amount")
     @NotNull (message = "amount must not be empty")
@@ -40,7 +42,7 @@ public class Expense {
     protected Expense() {
     }
 
-    protected Expense(Long id, String description, Date expenseDate, BigDecimal amount, ExpenseType expenseType) {
+    protected Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType) {
         super();
         this.id = id;
         this.description = description;
@@ -65,11 +67,11 @@ public class Expense {
         this.description = description;
     }
 
-    public Date getExpenseDate() {
+    public LocalDate getExpenseDate() {
         return expenseDate;
     }
 
-    public void setExpenseDate(Date expenseDate) {
+    public void setExpenseDate(LocalDate expenseDate) {
         this.expenseDate = expenseDate;
     }
 

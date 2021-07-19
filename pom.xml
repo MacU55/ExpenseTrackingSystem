@@ -15,8 +15,8 @@
     </parent>
 
     <properties>
-        <slf4jVersion>1.6.1</slf4jVersion>
-        <log4j-ver>1.2.17</log4j-ver>
+        <slf4jVersion>1.7.25</slf4jVersion>
+        <slf4j-log4j12Version>1.7.25</slf4j-log4j12Version>
         <hibernate-validatorVersion>6.0.13.Final</hibernate-validatorVersion>
         <javax.validationVersion>2.0.1.Final</javax.validationVersion>
         <spring-boot-maven-pluginVersion>2.5.2</spring-boot-maven-pluginVersion>
@@ -54,6 +54,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,6 +72,17 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- thymeleaf-->
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>3.0.11.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring5</artifactId>
+            <version>3.0.11.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-java8time</artifactId>
@@ -84,9 +96,9 @@
             <version>${slf4jVersion}</version>
         </dependency>
         <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>${log4j-ver}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j-log4j12Version}</version>
         </dependency>
 
         <!-- 2 validation dependency-->
