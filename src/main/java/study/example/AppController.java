@@ -1,6 +1,6 @@
 package study.example;
 
-import org.apache.log4j.RollingFileAppender;
+//import org.apache.log4j.RollingFileAppender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
