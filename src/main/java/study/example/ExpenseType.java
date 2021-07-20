@@ -1,9 +1,9 @@
 package study.example;
 
 public enum ExpenseType {
-    TRANSPORT("Транспорт"), LODGING("Жилье"),
-    EDUCATION("Образование"), MEALS("Питание"),
-    MISCELLANEOUS("Разное");
+    TRANSPORT("Transport"), LODGING("Lodging"),
+    EDUCATION("Education"), MEALS("Meals"),
+    MISCELLANEOUS("Miscellaneous");
 
     String label;
 

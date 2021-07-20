@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,5 +29,16 @@ public class ExpenseService {
     public void delete(long id) {
         repo.deleteById(id);
     }
+/*
+    List<Expense> findExpensesByDateBetween(
+            LocalDate expenseTimeStart,
+            LocalDate expenseTimeEnd){
+
+        //return
+
+    }
+
+ */
+
 }
 

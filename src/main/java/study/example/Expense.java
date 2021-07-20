@@ -23,6 +23,7 @@ public class Expense {
     @NotBlank (message = "Please fill in 'Expense description' ")
     private String description;
 
+    // date for using in listAll()
     @Column(name="expenseDate")
     @NotNull (message = "Expense date must not be empty")
     @PastOrPresent (message = "Expense date must be in past or in present")
@@ -32,7 +33,7 @@ public class Expense {
     @Column(name="amount")
     @NotNull (message = "amount must not be empty")
     @DecimalMin (value = "0.00", message = "amount should not be greater than 0")
-    @Digits(integer=6, fraction=2, message = "integer part is 3 digits and fraction part is 2 digits")
+    @Digits(integer=6, fraction=2, message = "integer part is 6 digits and fraction part is 2 digits")
     private BigDecimal amount;
 
     @Column(name="expenseType")
