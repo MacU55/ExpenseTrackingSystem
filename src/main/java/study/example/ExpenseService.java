@@ -14,7 +14,10 @@ public class ExpenseService {
     @Autowired
     private ExpenseRepository repo;
 
-    public List<Expense> listAll() {
+    public List<Expense> listAll(LocalDate startExpenseDate, LocalDate finishExpenseDate) {
+        if(startExpenseDate!= null & finishExpenseDate!=null){
+            return repo.findExpensesBetweenTwoDates(startExpenseDate, finishExpenseDate);
+        }
         return repo.findAll();
     }
 
@@ -29,16 +32,7 @@ public class ExpenseService {
     public void delete(long id) {
         repo.deleteById(id);
     }
-/*
-    List<Expense> findExpensesByDateBetween(
-            LocalDate expenseTimeStart,
-            LocalDate expenseTimeEnd){
 
-        //return
-
-    }
-
- */
 
 }
 

@@ -1,13 +1,18 @@
 package study.example;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+
+import static org.apache.logging.log4j.core.appender.rewrite.MapRewritePolicy.Mode.Add;
 
 
 @Entity
@@ -31,9 +36,9 @@ public class Expense {
     private LocalDate expenseDate = LocalDate.now(ZoneId.of( "Europe/Kiev" ));
 
     @Column(name="amount")
-    @NotNull (message = "amount must not be empty")
-    @DecimalMin (value = "0.00", message = "amount should not be greater than 0")
-    @Digits(integer=6, fraction=2, message = "integer part is 6 digits and fraction part is 2 digits")
+    @NotNull //(message = "{amount.notValid}")
+    @DecimalMin (value = "0.00", message = "Amount should not be greater than 0")
+    @Digits(integer=6, fraction=2, message = "Integer part is 6 digits and fraction part is 2 digits")
     private BigDecimal amount;
 
     @Column(name="expenseType")

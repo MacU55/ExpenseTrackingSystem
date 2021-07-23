@@ -34,9 +34,23 @@ h1 {
         <a href="new" class="btn" >Create new expense</a>
     </div>
     <div class="d-block my-3">
-        <a href="new" class="btn" >Select expense date range</a>
+        <h3>Select expense date range</h3>
     </div>
+    <form th:action="@{/}">
+        <div class="d-block my-3">
+            <div>Start expense date</div>
+             <input type="date" name="startExpenseDate" id="startExpenseDate"  th:value="${startExpenseDate}"/>
+            <br> <br>
+            <div>Finish expense date</div>
+             <input type="date" name="finishExpenseDate" id="finishExpenseDate"  th:value="${finishExpenseDate}"/>
+            <br>
+            <input type="submit" value="Search" name="search" />
+            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
+            <a href="export" class="btn" >Export</a>
+            <!--input type="submit" value="Export" name="export" /-->
 
+        </div>
+    </form>
 
     <br/><br/>
     <table border="0" cellpadding="10" class="table table-striped" style="width:50%;align:center;">
@@ -66,5 +80,10 @@ h1 {
         </tbody>
     </table>
 </div>
+<script type="text/javascript">
+	function clearSearch() {
+		window.location = "[[@{/}]]";
+	}
+</script>
 </body>
 </html>

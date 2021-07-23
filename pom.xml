@@ -58,6 +58,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+            <version>2.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
@@ -111,6 +112,14 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validatorVersion}</version>
         </dependency>
+
+        <!-- super-csv dependency-->
+        <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
