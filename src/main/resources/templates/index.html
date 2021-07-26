@@ -36,7 +36,7 @@ h1 {
     <div class="d-block my-3">
         <h3>Select expense date range</h3>
     </div>
-    <form th:action="@{/}">
+    <form th:action="@{/}" method="post">
         <div class="d-block my-3">
             <div>Start expense date</div>
              <input type="date" name="startExpenseDate" id="startExpenseDate"  th:value="${startExpenseDate}"/>
@@ -44,11 +44,10 @@ h1 {
             <div>Finish expense date</div>
              <input type="date" name="finishExpenseDate" id="finishExpenseDate"  th:value="${finishExpenseDate}"/>
             <br>
-            <input type="submit" value="Search" name="search" />
+            <input type="submit"name="search"  value="Search" />
             <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
-            <a href="export" class="btn" >Export</a>
-            <!--input type="submit" value="Export" name="export" /-->
-
+            <!--a href="export" class="btn" >Export</a-->
+            <input type="submit" name="export" value="Export"  />
         </div>
     </form>
 

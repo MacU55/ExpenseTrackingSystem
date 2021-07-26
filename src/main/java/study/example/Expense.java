@@ -1,18 +1,14 @@
 package study.example;
 
-import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
 
-import static org.apache.logging.log4j.core.appender.rewrite.MapRewritePolicy.Mode.Add;
+
 
 
 @Entity
