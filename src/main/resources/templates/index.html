@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8"/>
     <title>Expense Manager</title>
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script-->
-<style>
+    <style>
 body {
   background-color: linen;
 }
@@ -39,17 +39,29 @@ h1 {
     <form th:action="@{/}" method="post">
         <div class="d-block my-3">
             <div>Start expense date</div>
-             <input type="date" name="startExpenseDate" id="startExpenseDate"  th:value="${startExpenseDate}"/>
+            <input type="date" name="startExpenseDate" id="startExpenseDate"  th:value="${startExpenseDate}"/>
             <br> <br>
             <div>Finish expense date</div>
-             <input type="date" name="finishExpenseDate" id="finishExpenseDate"  th:value="${finishExpenseDate}"/>
-            <br>
-            <input type="submit"name="search"  value="Search" />
+            <input type="date" name="finishExpenseDate" id="finishExpenseDate"  th:value="${finishExpenseDate}"/>
+            <div style="height:20px"></div>
+            <input type="submit" name="search"  value="SearchByDate" />
             <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
-            <!--a href="export" class="btn" >Export</a-->
-            <input type="submit" name="export" value="Export"  />
+            <input type="submit" name="export" value="ExportByDate"  />
         </div>
+        <br/>
     </form>
+    <div style="height:20px"></div>
+    <div class="d-block my-3">
+    <form method="POST" th:action="@{/upload-csv-file}" enctype="multipart/form-data">
+        <div style="align:center">
+            <label for="file" >Select a CSV file</label>
+            <input type="file" name="file" class="form-control-file" id="file" accept=".csv">
+        </div>
+        <button type="submit" class="btn btn-primary" >Import expenses</button>
+    </form>
+    </div>
+
+
 
     <br/><br/>
     <table border="0" cellpadding="10" class="table table-striped" style="width:50%;align:center;">

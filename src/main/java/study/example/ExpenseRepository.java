@@ -14,6 +14,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findExpensesBetweenTwoDates(@Param("startExpenseDate") @DateTimeFormat
             (iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate, @Param("finishExpenseDate")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate);
+
+
 }
 
 
