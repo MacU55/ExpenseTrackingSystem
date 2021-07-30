@@ -1,4 +1,4 @@
-package study.example;
+package study.example.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -41,10 +41,10 @@ public class Expense {
     @Enumerated(EnumType.STRING)
     private ExpenseType expenseType;
 
-    protected Expense() {
+    public Expense() {
     }
 
-    protected Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType) {
+    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType) {
         super();
         this.id = id;
         this.description = description;

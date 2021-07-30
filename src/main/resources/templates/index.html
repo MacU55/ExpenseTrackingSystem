@@ -39,14 +39,22 @@ h1 {
     <form th:action="@{/}" method="post">
         <div class="d-block my-3">
             <div>Start expense date</div>
-             <input type="date" name="startExpenseDate" id="startExpenseDate"  th:value="${startExpenseDate}"/>
+            <input type="date" name="startExpenseDate" id="startExpenseDate"  th:value="${startExpenseDate}"/>
             <br> <br>
             <div>Finish expense date</div>
              <input type="date" name="finishExpenseDate" id="finishExpenseDate"  th:value="${finishExpenseDate}"/>
-            <br>
-            <input type="submit"name="search"  value="Search" />
+             <div style="height:20px"> </div>
+            <div class="d-block my-3">
+                <select name="expenseType" class="d-block my-3">
+                    <option th:value="${null}" th:selected="${type==null}">Select expense type</option>
+                    <option th:each="type : ${T(study.example.model.ExpenseType).values()}"
+                            th:selected="${type==expenseType}"
+                            th:value="${type}"
+                            th:text="${type.label}"></option>
+                    </select>
+            </div>
+            <input type="submit" name="search"  value="Search" />
             <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" />
-            <!--a href="export" class="btn" >Export</a-->
             <input type="submit" name="export" value="Export"  />
         </div>
     </form>

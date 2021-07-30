@@ -1,4 +1,4 @@
-package study.example;
+package study.example.model;
 
 public enum ExpenseType {
     TRANSPORT("Transport"), LODGING("Lodging"),
