@@ -37,13 +37,22 @@ public class ExpenseService {
         repo.deleteById(id);
     }
 
-    public void uploadCSV(MultipartFile file) throws SQLException, IOException {
-        repo.saveFromCSVToDatabase(file);
+    // method to insert data from csv file to database
+    public void saveFromSCVToDatabase(MultipartFile file) {
+        try {
+            List<Expense> expenseList = CSVHelper.csvToExpenses(file.getInputStream());
+            repo.saveAll(expenseList);
+        } catch (IOException e) {
+            throw new RuntimeException("fail to store csv data: " + e.getMessage());
+        }
     }
 
     public void downloadBLOB(long id) throws SQLException, IOException {
         repo.downloadBLOBFromDatabase(id);
 
     }
+
+
+
 }
 

@@ -57,12 +57,16 @@ h1 {
     <br>
 
     <div class="d-block my-3" style=" margin-left: 20px">
-        <div style="font-size:12pt; font-weight: 600; margin:1.5%; float:left">Select CSV file to import</div>
+
         <div style="font-size:12pt; margin:1.5%; float:left">
             <!-- form to insert data from csv file to database -->
-            <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
-                <input id="singleFileUploadInput" type="file" name="CSVfile" required style="font-size:12pt; font-weight: 600;"/>
-                <button type="submit" style="font-size:12pt; font-weight: 600;">Submit</button>
+            <form method="POST" th:action="@{/upload}" enctype="multipart/form-data">
+                <div class="form-group mt-3">
+                    <div style="font-size:12pt; font-weight: 600; margin:1.5%; float:left">Select CSV file to import</div>
+                    <!--label for="file">Select a CSV file</label-->
+                    <input type="file" name="file" class="form-control-file" id="file" accept=".csv">
+                </div>
+                <button type="submit" style="font-size:12pt; font-weight: 600;">Import Expenses</button>
             </form>
         </div>
     </div>
