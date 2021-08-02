@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -91,6 +93,17 @@ public class AppController {
         csvWriter.close();
     }
 
+    // handling to upload csv file to database
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public String uploadCSV(@RequestParam("CSVfile") MultipartFile file, BindingResult bindingResult) throws SQLException, IOException {
+        String fileName ="";
+        if(bindingResult.hasErrors()){
+            LOGGER.info("CSV file is not valid");
+        }
+        service.uploadCSV(file);
+        LOGGER.info("xsv file was uploaded successfully");
+        return "redirect:/";
+    }
 
     // handling to forward on form for creating new expense
     @RequestMapping("/new")
@@ -130,6 +143,12 @@ public class AppController {
         return "redirect:/";
     }
 
-
+    // handling to download photo proof from database for selected expense
+    @RequestMapping("/downLoadPhotoProof/{id}")
+    public String downloadPhotoProof(@PathVariable(name = "id") int id) throws SQLException, IOException {
+        service.downloadBLOB(id);
+        LOGGER.info("photo proof for selected expense was downloaded successfully");
+        return "redirect:/";
+    }
 }
 

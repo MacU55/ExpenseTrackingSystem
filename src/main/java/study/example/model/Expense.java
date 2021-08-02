@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -49,16 +50,20 @@ public class Expense {
     @CsvBindByName
     private ExpenseType expenseType;
 
+    @Column(name = "photoProof")
+    private Blob photoProof;
+
     public Expense() {
     }
 
-    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType) {
+    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, Blob photoProof) {
         super();
         this.id = id;
         this.description = description;
         this.expenseDate = expenseDate;
         this.amount = amount;
         this.expenseType = expenseType;
+        this.photoProof = photoProof;
     }
 
     public Long getId() {
@@ -99,5 +104,25 @@ public class Expense {
 
     public void setExpenseType(ExpenseType expenseType) {
         this.expenseType = expenseType;
+    }
+
+    public Blob getPhotoProof() {
+        return photoProof;
+    }
+
+    public void setPhotoProof(Blob photoProof) {
+        this.photoProof = photoProof;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", expenseDate=" + expenseDate +
+                ", amount=" + amount +
+                ", expenseType=" + expenseType +
+                ", photoProof=" + photoProof +
+                '}';
     }
 }

@@ -48,8 +48,8 @@ width: 175px;
 <body class="bg-light">
 <div align="center" class="container">
     <h1>Create new expense</h1>
-
-    <form action="#" th:action="@{/save}" th:object="${expense}" style="width:50%" method="post">
+<br><br>
+    <form action="#" th:action="@{/save}" th:object="${expense}" style="width:50%" method="post" enctype="multipart/form-data">
     <div align="left" class="form-label">
         <label >Expense description</label>
         <br>
@@ -80,20 +80,27 @@ width: 175px;
 
     <div  align="left" class="d-block my-3">
         <div d-block my-3>Select type of expense</div>
-
            <select name="expenseType" class="d-block my-3">
-                <option th:each="type : ${T(study.example.ExpenseType).values()}"
+                <option th:each="type : ${T(study.example.model.ExpenseType).values()}"
                 th:value="${type}" th:text="${type.label}"></option>
             </select>
-        <br>
     </div>
-        <div align="left" class="d-block my-3">
-            <button type="submit"  class="btn" >Save</button>
-        </div>
 
-        <div align="left" class="d-block my-3">
-            <a th:href="@{'/' }" class="btn">Back to expenses list</a>
+    <div align="left" class="d-block my-3">
+        <div d-block my-3>Select file to save photo proof</div>
+        <input type="file"  th:field="*{photoProof}" />
+        <!--button type="submit">Submit</button-->
+        <div>
+            <span th:if="${#fields.hasErrors('photoProof')}" th:errors="*{photoProof}">photoProof err</span>
         </div>
+    </div>
+
+    <div align="left" class="d-block my-3">
+        <button type="submit"  class="btn" >Save</button>
+    </div>
+    <div align="left" class="d-block my-3">
+        <a th:href="@{'/' }" class="btn">Back to expenses list</a>
+    </div>
 
 </form>
 </div>

@@ -3,10 +3,13 @@ package study.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
 import study.example.repository.ExpenseRepository;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,6 +37,13 @@ public class ExpenseService {
         repo.deleteById(id);
     }
 
+    public void uploadCSV(MultipartFile file) throws SQLException, IOException {
+        repo.saveFromCSVToDatabase(file);
+    }
 
+    public void downloadBLOB(long id) throws SQLException, IOException {
+        repo.downloadBLOBFromDatabase(id);
+
+    }
 }
 
