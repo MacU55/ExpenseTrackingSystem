@@ -88,7 +88,7 @@ width: 175px;
 
     <div align="left" class="d-block my-3">
         <div d-block my-3>Select file to save photo proof</div>
-        <input type="file"  th:field="*{photoProof}" />
+        <input type="file" name="imageFile" th:field="*{photoProof}" />
         <!--button type="submit">Submit</button-->
         <div>
             <span th:if="${#fields.hasErrors('photoProof')}" th:errors="*{photoProof}">photoProof err</span>

@@ -22,7 +22,6 @@ public class ExpenseService {
 
     public List<Expense> listAll(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType) {
         return repo.findExpensesByDateAndType(startExpenseDate, finishExpenseDate, expenseType);
-
     }
 
     public void save(Expense expense) {
@@ -47,11 +46,9 @@ public class ExpenseService {
         }
     }
 
-    public void downloadBLOB(long id) throws SQLException, IOException {
-        repo.downloadBLOBFromDatabase(id);
-
+    public void saveImageToDatabase(MultipartFile imageFile) throws SQLException, IOException {
+        repo.saveImageFileToDatabase(imageFile);
     }
-
 
 
 }

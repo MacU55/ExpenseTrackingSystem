@@ -1,7 +1,5 @@
 package study.example;
 
-//import org.apache.log4j.RollingFileAppender;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,10 +69,13 @@ public class AppController {
 
     // handling to download csv file by selecting dates range
     @RequestMapping(value = "/export", method = {RequestMethod.POST})
-    public void exportToCSVByDates(HttpServletResponse response, Model model, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate startExpenseDate, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                           LocalDate finishExpenseDate, HttpServletRequest httpServletRequest,  @RequestParam(required = false) ExpenseType expenseType)
-            throws IOException {
+    public void exportToCSVByDates(
+        HttpServletResponse response,
+        Model model,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
+        HttpServletRequest httpServletRequest,  @RequestParam(required = false) ExpenseType expenseType
+    )   throws IOException {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -99,7 +100,7 @@ public class AppController {
 
     // handling to upload csv file to database
     @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("CSVFile") MultipartFile file) {
         String message = "";
 
         try {
@@ -130,15 +131,21 @@ public class AppController {
 
     // handling to save new expense
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveExpense(@Valid @ModelAttribute("expense") Expense expense, BindingResult bindingResult) {
+    public String saveExpense(
+        @Valid @ModelAttribute("expense") Expense expense,
+        BindingResult bindingResult,
+        @RequestParam("imageFile") MultipartFile imageFile
+        ) throws SQLException, IOException {
+
         if (bindingResult.hasErrors()) {
-            LOGGER.error("incorrect data in  form");
-            return "new_expense";
+        LOGGER.error("incorrect data in  form");
+        return "new_expense";
         }
+        service.saveImageToDatabase(imageFile);
         service.save(expense);
         LOGGER.info("new expense is added successfully");
         return "redirect:/";
-    }
+        }
 
     // handling to edit selected expense
     @RequestMapping("/edit/{id}")
@@ -161,7 +168,7 @@ public class AppController {
     // handling to download photo proof from database for selected expense
     @RequestMapping("/downLoadPhotoProof/{id}")
     public String downloadPhotoProof(@PathVariable(name = "id") int id) throws SQLException, IOException {
-        service.downloadBLOB(id);
+        //service.downloadBLOB(id);
         LOGGER.info("photo proof for selected expense was downloaded successfully");
         return "redirect:/";
     }
