@@ -5,46 +5,7 @@
     <meta charset="utf-8"/>
     <title>Expense Manager</title>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <!--script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script-->
-<style>
-body {
-  background-color: #c0c1c9;
-}
-
-h1 {
-  color: maroon;
-  margin-left: 40px;
-  }
-
-.btn {
-    display: inline-block; /* Строчно-блочный элемент */
-    background: #8C959D; /* Серый цвет фона */
-    color: #fff; /* Белый цвет текста */
-    padding: 0.6rem 1.01rem; /* Поля вокруг текста */
-    text-decoration: none; /* Убираем подчёркивание */
-    border-radius: 3px; /* Скругляем уголки */
-   }
-  .page{
-  width: 1000px;
-  margin: 0 auto;
-  background-color:  #f3f3f4;
-  text-align:center;
-  align="center"
-  }
-  .block{
-  float: left; /*Задаем обтекание*/
-  line-height: 20px;/*Высота строки +  верт. центрирования текста*/
-  font-size: 10px;
-  width: 270px; /*Фиксируем ширину блока*/
-  height: 120px;
-  margin-right: 5px;
-  margin-left: 5px;
-  padding: 10px 10px;
-  text-align: left; /*Центрируем текст по горизонтали*/
- /*border: 1px solid #e6eef4;*/
-  border-radius: 3px;
-
-</style>
+     <link href = "style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="page">
@@ -55,9 +16,7 @@ h1 {
         <a href="new" class="btn" style="width:200px; align:left ">Create new expense</a>
     </div>
     <br>
-
     <!--div class="d-block my-3" style=" margin-left: 20px"-->
-
         <div style="font-size:12pt; margin-left: 30px">
             <div style="font-size:12pt; font-weight: 600; margin:1.1%; float:left">Select CSV file to import</div>
             <!-- form to insert data from csv file to database -->
@@ -66,9 +25,7 @@ h1 {
                 <button type="submit" style="font-size:12pt; font-weight: 600;">Submit</button>
             </form>
         </div>
-    <!--/div-->
-    <hr>
-
+       <hr>
 
     <div class="d-block my-3" style="padding: 5%; margin-left: 1px">
     <form th:action="@{/}" method="post">
@@ -91,7 +48,7 @@ h1 {
                             th:selected="${type==expenseType}"
                             th:value="${type}"
                             th:text="${type.label}" style="font-size:12pt; font-weight: 600;"></option>
-                    </select>
+                </select>
             </div>
             <div align="right" class="d-block my-3" style="height:110px">
             <input type="submit" name="search"  value="Search" class="btn" style="margin-right:15px"/>

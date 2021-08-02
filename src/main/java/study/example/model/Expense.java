@@ -28,7 +28,6 @@ public class Expense {
     @CsvBindByName
     private String description;
 
-    // date for using in listAll()
     @Column(name="expenseDate")
     @NotNull (message = "Expense date must not be empty")
     @PastOrPresent (message = "Expense date must be in past or in present")
@@ -49,23 +48,23 @@ public class Expense {
     @Enumerated(EnumType.STRING)
     @CsvBindByName
     private ExpenseType expenseType;
-/*
+
     @Column(name = "photoProof")
     private Blob photoProof;
 
- */
+
 
     public Expense() {
     }
 
-    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType) {
+    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, Blob photoProof) {
         super();
         this.id = id;
         this.description = description;
         this.expenseDate = expenseDate;
         this.amount = amount;
         this.expenseType = expenseType;
-        //this.photoProof = photoProof;
+        this.photoProof = photoProof;
     }
 
     public Long getId() {
@@ -107,7 +106,7 @@ public class Expense {
     public void setExpenseType(ExpenseType expenseType) {
         this.expenseType = expenseType;
     }
-/*
+
     public Blob getPhotoProof() {
         return photoProof;
     }
@@ -115,8 +114,6 @@ public class Expense {
     public void setPhotoProof(Blob photoProof) {
         this.photoProof = photoProof;
     }
-
- */
 
     @Override
     public String toString() {
@@ -126,6 +123,7 @@ public class Expense {
                 ", expenseDate=" + expenseDate +
                 ", amount=" + amount +
                 ", expenseType=" + expenseType +
-               '}';
+                ", photoProof=" + photoProof +
+                '}';
     }
 }
