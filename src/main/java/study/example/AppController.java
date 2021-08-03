@@ -3,8 +3,12 @@ package study.example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -141,7 +145,8 @@ public class AppController {
         LOGGER.error("incorrect data in  form");
         return "new_expense";
         }
-        service.saveImageToDatabase(imageFile);
+        //service.saveImageToDatabase(imageFile);
+        expense.setPhotoProof(imageFile.getBytes());
         service.save(expense);
         LOGGER.info("new expense is added successfully");
         return "redirect:/";
@@ -166,11 +171,16 @@ public class AppController {
     }
 
     // handling to download photo proof from database for selected expense
-    @RequestMapping("/downLoadPhotoProof/{id}")
-    public String downloadPhotoProof(@PathVariable(name = "id") int id) throws SQLException, IOException {
-        //service.downloadBLOB(id);
-        LOGGER.info("photo proof for selected expense was downloaded successfully");
-        return "redirect:/";
+    @RequestMapping(value = "/downLoadPhotoProof/{id}", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<Resource> downloadFile(@PathVariable(name="id") int id) {
+        // Load file from database
+        Expense expense = service.getFile(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("image/jpg"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expense.getId() + "\""+".jpg")
+                .body(new ByteArrayResource(expense.getPhotoProof()));
     }
+
 }
 

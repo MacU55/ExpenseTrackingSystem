@@ -75,7 +75,6 @@ h1 {
     <!--/div-->
     <hr>
 
-
     <div class="d-block my-3" style="padding: 5%; margin-left: 1px">
     <form th:action="@{/}" method="post">
         <div class="d-block my-3" style="margin-left:10px">
@@ -128,8 +127,8 @@ h1 {
             <td th:text="${expense.amount}">Amount</td>
             <td th:text="${expense.expenseType.label}">Expense type</td>
             <td>
-                <a th:href="@{'/edit/' + ${expense.id}}" class="btn">Edit</a>
-                <a th:href="@{'/delete/' + ${expense.id}}" class="btn">Delete</a>
+                <a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px">Edit</a>
+                <a th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px">Delete</a>
                 <a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}" class="btn">Download photo</a>
             </td>
         </tr>

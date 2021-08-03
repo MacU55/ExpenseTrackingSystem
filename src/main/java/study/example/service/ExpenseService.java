@@ -4,12 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import study.example.exceptions.MyFileNotFoundException;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
 import study.example.repository.ExpenseRepository;
 
+
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -46,10 +47,9 @@ public class ExpenseService {
         }
     }
 
-    public void saveImageToDatabase(MultipartFile imageFile) throws SQLException, IOException {
-        repo.saveImageFileToDatabase(imageFile);
+    public Expense getFile(int fileId) {
+        return repo.findById((long) fileId)
+                .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
     }
-
-
 }
 

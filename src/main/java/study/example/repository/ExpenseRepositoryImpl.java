@@ -1,18 +1,14 @@
 package study.example.repository;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +51,5 @@ public class ExpenseRepositoryImpl implements ExpenseRepositoryCustom {
         cq.where(predicates.toArray(new Predicate[0]));
         return em.createQuery(cq).getResultList();
     }
-
-    public void saveImageFileToDatabase(MultipartFile file) throws IOException, SQLException{
-
-
-    }
-
 }
 

@@ -13,10 +13,6 @@ public interface ExpenseRepositoryCustom {
 
     List<Expense> findExpensesByDateAndType(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType);
 
-   void saveImageFileToDatabase(MultipartFile file) throws IOException, SQLException;
 
-   /* void downloadBLOBFromDatabase(Long id) throws IOException, SQLException;
-
-    */
 
 }

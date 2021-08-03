@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.sql.Blob;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -49,15 +48,15 @@ public class Expense {
     @CsvBindByName
     private ExpenseType expenseType;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "photoProof")
-    private Blob photoProof;
-
-
+    private byte[] photoProof;
 
     public Expense() {
     }
 
-    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, Blob photoProof) {
+    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, byte[] photoProof) {
         super();
         this.id = id;
         this.description = description;
@@ -65,6 +64,9 @@ public class Expense {
         this.amount = amount;
         this.expenseType = expenseType;
         this.photoProof = photoProof;
+    }
+
+    public Expense(String fileName, String contentType, byte[] bytes) {
     }
 
     public Long getId() {
@@ -107,11 +109,11 @@ public class Expense {
         this.expenseType = expenseType;
     }
 
-    public Blob getPhotoProof() {
+    public byte[] getPhotoProof() {
         return photoProof;
     }
 
-    public void setPhotoProof(Blob photoProof) {
+    public void setPhotoProof(byte[] photoProof) {
         this.photoProof = photoProof;
     }
 
