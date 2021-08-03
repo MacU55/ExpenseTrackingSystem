@@ -6,6 +6,53 @@
     <title>Expense Manager</title>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
      <link href = "style.css" rel="stylesheet" type="text/css">
+    <style>
+        body {
+  background-color: #c0c1c9;
+}
+
+h1 {
+  color: maroon;
+  margin-left: 40px;
+  }
+
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff; /* Белый цвет текста */
+    padding: 0.6rem 1.01rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+
+  .page{
+  width: 1000px;
+  margin: 0 auto;
+  background-color:  #f3f3f4;
+  text-align:center;
+  align="center"
+  }
+  .block{
+  float: left; /*Задаем обтекание*/
+  line-height: 20px;/*Высота строки +  верт. центрирования текста*/
+  font-size: 10px;
+  width: 270px; /*Фиксируем ширину блока*/
+  height: 120px;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding: 10px 10px;
+  text-align: left; /*Центрируем текст по горизонтали*/
+ /*border: 1px solid #e6eef4;*/
+  border-radius: 3px;
+
+  span {
+  	color: red;
+  	font-style: italic;
+  }
+  select{
+  width: 175px;
+  }
+    </style>
 </head>
 <body>
 <div class="page">
@@ -25,7 +72,9 @@
                 <button type="submit" style="font-size:12pt; font-weight: 600;">Submit</button>
             </form>
         </div>
-       <hr>
+    <!--/div-->
+    <hr>
+
 
     <div class="d-block my-3" style="padding: 5%; margin-left: 1px">
     <form th:action="@{/}" method="post">
@@ -41,14 +90,14 @@
             </div>
 
             <div class="block">
-                <div style="font-size:12pt; font-weight: 600; margin-top:1.5%">Select expense type</div>
+                <div style="font-size:12pt; font-weight: 600; margin:1.5%">Select expense type</div>
                 <select name="expenseType"  style="font-size:12pt">
                     <option th:value="${null}" th:selected="${type==null}" style="font-size:12pt; font-weight: 600;">---</option>
                     <option th:each="type : ${T(study.example.model.ExpenseType).values()}"
                             th:selected="${type==expenseType}"
                             th:value="${type}"
                             th:text="${type.label}" style="font-size:12pt; font-weight: 600;"></option>
-                </select>
+                    </select>
             </div>
             <div align="right" class="d-block my-3" style="height:110px">
             <input type="submit" name="search"  value="Search" class="btn" style="margin-right:15px"/>
