@@ -53,33 +53,33 @@ public class AppController {
     // handling start page
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String viewHomePage(
-       Model model,
-       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
-       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
-       @RequestParam(required = false) ExpenseType expenseType,
-       @RequestParam(required = false) String export
+            Model model,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
+            @RequestParam(required = false) ExpenseType expenseType,
+            @RequestParam(required = false) String export
     ) {
-       if(export != null){
-           return "forward:/export";
-       }
+        if (export != null) {
+            return "forward:/export";
+        }
         List<Expense> expenseList = service.listAll(startExpenseDate, finishExpenseDate, expenseType);
-       model.addAttribute("expenseList", expenseList);
-       LOGGER.info("expense list was returned successfully");
-       model.addAttribute("startExpenseDate", startExpenseDate);
-       model.addAttribute("finishExpenseDate", finishExpenseDate);
-       model.addAttribute("expenseType", expenseType);
-       return "index";
-      }
+        model.addAttribute("expenseList", expenseList);
+        LOGGER.info("expense list was returned successfully");
+        model.addAttribute("startExpenseDate", startExpenseDate);
+        model.addAttribute("finishExpenseDate", finishExpenseDate);
+        model.addAttribute("expenseType", expenseType);
+        return "index";
+    }
 
     // handling to download csv file by selecting dates range
     @RequestMapping(value = "/export", method = {RequestMethod.POST})
     public void exportToCSVByDates(
-        HttpServletResponse response,
-        Model model,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
-        HttpServletRequest httpServletRequest,  @RequestParam(required = false) ExpenseType expenseType
-    )   throws IOException {
+            HttpServletResponse response,
+            Model model,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
+            HttpServletRequest httpServletRequest, @RequestParam(required = false) ExpenseType expenseType
+    ) throws IOException {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String currentDateTime = dateFormatter.format(new Date());
@@ -117,10 +117,10 @@ public class AppController {
                     .path(file.getOriginalFilename())
                     .toUriString();
 
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message,fileDownloadUri));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, fileDownloadUri));
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message,""));
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, ""));
         }
 
     }
@@ -136,21 +136,21 @@ public class AppController {
     // handling to save new expense
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveExpense(
-        @Valid @ModelAttribute("expense") Expense expense,
-        BindingResult bindingResult,
-        @RequestParam("imageFile") MultipartFile imageFile
-        ) throws SQLException, IOException {
+            @Valid @ModelAttribute("expense") Expense expense,
+            BindingResult bindingResult,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
+    ) throws SQLException, IOException {
 
         if (bindingResult.hasErrors()) {
-        LOGGER.error("incorrect data in  form");
-        return "new_expense";
+            LOGGER.error("incorrect data in  form");
+            return "new_expense";
         }
         //service.saveImageToDatabase(imageFile);
         expense.setPhotoProof(imageFile.getBytes());
         service.save(expense);
         LOGGER.info("new expense is added successfully");
         return "redirect:/";
-        }
+    }
 
     // handling to edit selected expense
     @RequestMapping("/edit/{id}")
@@ -172,13 +172,13 @@ public class AppController {
 
     // handling to download photo proof from database for selected expense
     @RequestMapping(value = "/downLoadPhotoProof/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Resource> downloadFile(@PathVariable(name="id") int id) {
+    public ResponseEntity<Resource> downloadFile(@PathVariable(name = "id") int id) {
         // Load file from database
         Expense expense = service.getFile(id);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("image/jpg"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expense.getId() + "\""+".jpg")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expense.getId() + "\"" + ".jpg")
                 .body(new ByteArrayResource(expense.getPhotoProof()));
     }
 

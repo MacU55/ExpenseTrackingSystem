@@ -21,12 +21,30 @@
        });
    });
 
+
+
+
+
+
+
+
+
+
     </script>
     <style>
     span {
     color: red;
     font-style: italic;
     }
+
+
+
+
+
+
+
+
+
 
     </style>
 </head>
@@ -75,7 +93,7 @@
 
         <div align="left" class="d-block my-3">
             <div d-block my-3>Select file to save photo proof</div>
-            <input id="singleFileUploadInput" type="file" name="imageFile" />
+            <input id="singleFileUploadInput" type="file" name="imageFile"/>
             <div>
                 <span th:if="${#fields.hasErrors('photoProof')}" th:errors="*{photoProof}">photoProof err</span>
             </div>
@@ -87,6 +105,7 @@
         <div align="left" class="d-block my-3">
             <a th:href="@{'/'}" class="btn">Back to expenses list</a>
         </div>
+
 
     </form>
 </div>

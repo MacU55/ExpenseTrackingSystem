@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8"/>
     <title>Expense Manager</title>
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-     <link href = "style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="style.css" rel="stylesheet" type="text/css">
     <style>
         body {
   background-color: #c0c1c9;
@@ -52,6 +52,11 @@ h1 {
   select{
   width: 175px;
   }
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -64,53 +69,58 @@ h1 {
     </div>
     <br>
     <!--div class="d-block my-3" style=" margin-left: 20px"-->
-        <div style="font-size:12pt; margin-left: 30px">
-            <div style="font-size:12pt; font-weight: 600; margin:1.1%; float:left">Select CSV file to import</div>
-            <!-- form to insert data from csv file to database -->
-            <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
-                <input id="singleFileUploadInput" type="file" name="CSVFile" required style="font-size:12pt; font-weight: 600;"/>
-                <button type="submit" style="font-size:12pt; font-weight: 600;">Submit</button>
-            </form>
-        </div>
+    <div style="font-size:12pt; margin-left: 30px">
+        <div style="font-size:12pt; font-weight: 600; margin:1.1%; float:left">Select CSV file to import</div>
+        <!-- form to insert data from csv file to database -->
+        <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
+            <input id="singleFileUploadInput" type="file" name="CSVFile" required
+                   style="font-size:12pt; font-weight: 600;"/>
+            <button type="submit" style="font-size:12pt; font-weight: 600;">Submit</button>
+        </form>
+    </div>
     <!--/div-->
     <hr>
 
     <div class="d-block my-3" style="padding: 5%; margin-left: 1px">
-    <form th:action="@{/}" method="post">
-        <div class="d-block my-3" style="margin-left:10px">
-            <div class="block" style="margin-left:1px" >
-            <div style="font-size:12pt; font-weight: 600; margin:1.5% " >Start expense date</div>
-            <input type="date" name="startExpenseDate" id="startExpenseDate"  th:value="${startExpenseDate}" style="font-size:12pt; font-weight: 600;"/>
-            </div>
+        <form th:action="@{/}" method="post">
+            <div class="d-block my-3" style="margin-left:10px">
+                <div class="block" style="margin-left:1px">
+                    <div style="font-size:12pt; font-weight: 600; margin:1.5% ">Start expense date</div>
+                    <input type="date" name="startExpenseDate" id="startExpenseDate" th:value="${startExpenseDate}"
+                           style="font-size:12pt; font-weight: 600;"/>
+                </div>
 
-            <div class="block">
-            <div style="font-size:12pt; font-weight: 600; margin:1.5%">Finish expense date</div>
-            <input type="date" name="finishExpenseDate" id="finishExpenseDate"  th:value="${finishExpenseDate}" style="font-size:12pt; font-weight: 600;"/>
-            </div>
+                <div class="block">
+                    <div style="font-size:12pt; font-weight: 600; margin:1.5%">Finish expense date</div>
+                    <input type="date" name="finishExpenseDate" id="finishExpenseDate" th:value="${finishExpenseDate}"
+                           style="font-size:12pt; font-weight: 600;"/>
+                </div>
 
-            <div class="block">
-                <div style="font-size:12pt; font-weight: 600; margin:1.5%">Select expense type</div>
-                <select name="expenseType"  style="font-size:12pt">
-                    <option th:value="${null}" th:selected="${type==null}" style="font-size:12pt; font-weight: 600;">---</option>
-                    <option th:each="type : ${T(study.example.model.ExpenseType).values()}"
-                            th:selected="${type==expenseType}"
-                            th:value="${type}"
-                            th:text="${type.label}" style="font-size:12pt; font-weight: 600;"></option>
+                <div class="block">
+                    <div style="font-size:12pt; font-weight: 600; margin:1.5%">Select expense type</div>
+                    <select name="expenseType" style="font-size:12pt">
+                        <option th:value="${null}" th:selected="${type==null}"
+                                style="font-size:12pt; font-weight: 600;">---
+                        </option>
+                        <option th:each="type : ${T(study.example.model.ExpenseType).values()}"
+                                th:selected="${type==expenseType}"
+                                th:value="${type}"
+                                th:text="${type.label}" style="font-size:12pt; font-weight: 600;"></option>
                     </select>
+                </div>
+                <div align="right" class="d-block my-3" style="height:110px">
+                    <input type="submit" name="search" value="Search" class="btn" style="margin-right:15px"/>
+                    <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" class="btn"
+                           style="margin-right:15px"/>
+                    <input type="submit" name="export" value="Export" class="btn"/>
+                </div>
             </div>
-            <div align="right" class="d-block my-3" style="height:110px">
-            <input type="submit" name="search"  value="Search" class="btn" style="margin-right:15px"/>
-            <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" class="btn" style="margin-right:15px"/>
-            <input type="submit" name="export" value="Export" class="btn" />
-            </div>
-        </div>
-    </form>
+        </form>
     </div>
-
 
     <table border="0" cellpadding="10" class="table table-striped" style="width:100%;align:center;">
         <thead>
-        <tr >
+        <tr>
             <th>Expense ID</th>
             <th>Description</th>
             <th>Expense date</th>
@@ -129,7 +139,9 @@ h1 {
             <td>
                 <a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px">Edit</a>
                 <a th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px">Delete</a>
-                <a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}" class="btn">Download photo</a>
+                <span th:unless="${expense.photoProof==null}"><a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}"
+                                                                 class="btn">Download photo</a>
+                </span>
             </td>
         </tr>
         </tbody>
@@ -139,6 +151,7 @@ h1 {
 	function clearSearch() {
 		window.location = "[[@{/}]]";
 	}
+
 </script>
 </body>
 </html>

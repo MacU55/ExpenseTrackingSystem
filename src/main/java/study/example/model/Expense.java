@@ -18,32 +18,32 @@ public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     @CsvBindByName
     private Long id;
 
-    @Column(name="description")
-    @NotBlank (message = "Please fill in 'Expense description' ")
+    @Column(name = "description")
+    @NotBlank(message = "Please fill in 'Expense description' ")
     @CsvBindByName
     private String description;
 
-    @Column(name="expenseDate")
-    @NotNull (message = "Expense date must not be empty")
-    @PastOrPresent (message = "Expense date must be in past or in present")
-    @DateTimeFormat (pattern = "yyyy-MM-dd")
+    @Column(name = "expenseDate")
+    @NotNull(message = "Expense date must not be empty")
+    @PastOrPresent(message = "Expense date must be in past or in present")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @CsvBindByName
     @CsvDate(value = "yyyy-mm-dd")
     @CsvBindByPosition(position = 8)
-    private LocalDate expenseDate = LocalDate.now(ZoneId.of( "Europe/Kiev" ));
+    private LocalDate expenseDate = LocalDate.now(ZoneId.of("Europe/Kiev"));
 
-    @Column(name="amount")
+    @Column(name = "amount")
     @NotNull //(message = "{amount.notValid}")
-    @DecimalMin (value = "0.00", message = "Amount should not be greater than 0")
-    @Digits(integer=6, fraction=2, message = "Integer part is 6 digits and fraction part is 2 digits")
+    @DecimalMin(value = "0.00", message = "Amount should not be greater than 0")
+    @Digits(integer = 6, fraction = 2, message = "Integer part is 6 digits and fraction part is 2 digits")
     @CsvBindByName
     private BigDecimal amount;
 
-    @Column(name="expenseType")
+    @Column(name = "expenseType")
     @Enumerated(EnumType.STRING)
     @CsvBindByName
     private ExpenseType expenseType;
