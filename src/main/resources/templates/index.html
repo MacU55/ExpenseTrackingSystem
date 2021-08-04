@@ -57,6 +57,7 @@ h1 {
 
 
 
+
     </style>
 </head>
 <body>
@@ -137,10 +138,10 @@ h1 {
             <td th:text="${expense.amount}">Amount</td>
             <td th:text="${expense.expenseType.label}">Expense type</td>
             <td>
-                <a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px">Edit</a>
-                <a th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px">Delete</a>
+                <a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Edit</a>
+                <a th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Delete</a>
                 <span th:unless="${expense.photoProof==null}"><a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}"
-                                                                 class="btn">Download photo</a>
+                                                                 class="btn" style="float:left">Download photo</a>
                 </span>
             </td>
         </tr>
@@ -151,6 +152,7 @@ h1 {
 	function clearSearch() {
 		window.location = "[[@{/}]]";
 	}
+
 
 </script>
 </body>
