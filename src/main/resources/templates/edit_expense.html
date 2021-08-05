@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>Create New Expense</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link href = "style.css" rel="stylesheet" type="text/css">
+
     <script>
     <script type="text/javascript">
    $(function () {
@@ -20,29 +20,38 @@
            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
        });
    });
-</script>
- <style>
+
+    </script>
+    <style>
     span {
     color: red;
     font-style: italic;
     }
-</style>
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff !important; /* Белый цвет текста */
+    padding: 0.6rem 1.01rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+
+
+
+
+    </style>
 </head>
 
 <body class="bg-light">
 <div align="center" class="container">
-    <h1>Edit Expense</h1>
+    <h1>Create new expense</h1>
     <br><br>
-    <form action="#" th:action="@{/save}" th:object="${expense}" style="width:50%" method="post">
+    <form action="#" th:action="@{/save}" th:object="${expense}" style="width:50%" method="post"
+          enctype="multipart/form-data">
+        <input type="hidden" th:field="*{id}"/>
         <div align="left" class="form-label">
-            <label >Expense Id</label>
-            <div>
-                <input type="text" th:field="*{id}" readonly="readonly" />
-            </div>
+            <label>Expense description</label>
             <br>
-            <div>
-                <td>Expense description:</td>
-            </div>
             <input type="text" class="form-control" th:field="*{description}"/>
             <small id="passwordHelpBlock" class="form-text text-muted" align="left">
                 Your description may be 100 characters long maximum.
@@ -54,7 +63,7 @@
 
         <div align="left" class="d-block my-3">
             <div>Expense date</div>
-            <input type="date"  th:field="*{expenseDate}" />
+            <input type="date" th:field="*{expenseDate}"/>
             <div>
                 <span th:if="${#fields.hasErrors('expenseDate')}" th:errors="*{expenseDate}">expenseDate err</span>
             </div>
@@ -62,16 +71,15 @@
 
         <div align="left" class="d-block my-3">
             <div>Expense amount</div>
-            <input type="text" size="18" th:field="*{amount}" />
+            <input type="text" size="18" th:field="*{amount}"/>
             <div>
                 <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">amount err</span>
             </div>
         </div>
 
-        <div  align="left" class="d-block my-3">
+        <div align="left" class="d-block my-3">
             <div d-block my-3>Select type of expense</div>
-
-            <select name="expenseType"  class="d-block my-3">
+            <select name="expenseType" class="d-block my-3">
                 <option th:each="type : ${T(study.example.model.ExpenseType).values()}"
                         th:value="${type}" th:text="${type.label}"></option>
             </select>
@@ -79,18 +87,17 @@
 
         <div align="left" class="d-block my-3">
             <div d-block my-3>Select file to save photo proof</div>
-            <input type="file"  th:field="*{photoProof}" />
-            <!--button type="submit">Submit</button-->
+            <input id="singleFileUploadInput" type="file" name="imageFile"/>
             <div>
                 <span th:if="${#fields.hasErrors('photoProof')}" th:errors="*{photoProof}">photoProof err</span>
             </div>
         </div>
 
         <div align="left" class="d-block my-3">
-            <button type="submit"  class="btn" >Save</button>
+            <button type="submit" class="btn">Save</button>
         </div>
         <div align="left" class="d-block my-3">
-            <a th:href="@{'/' }" class="btn">Back to expenses list</a>
+            <a th:href="@{'/'}" class="btn ">Back to expenses list</a>
         </div>
 
     </form>

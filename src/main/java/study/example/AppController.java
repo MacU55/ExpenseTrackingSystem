@@ -130,7 +130,7 @@ public class AppController {
     public String showNewExpensePage(Model model) {
         Expense expense = new Expense();
         model.addAttribute("expense", expense);
-        return "new_expense";
+        return "edit_expense";
     }
 
     // handling to save new expense
@@ -143,10 +143,13 @@ public class AppController {
 
         if (bindingResult.hasErrors()) {
             LOGGER.error("incorrect data in  form");
-            return "new_expense";
+            return "edit_expense";
         }
         //service.saveImageToDatabase(imageFile);
-        expense.setPhotoProof(imageFile.getBytes());
+        if (!imageFile.isEmpty()) {
+            expense.setPhotoProof(imageFile.getBytes());
+        }
+
         service.save(expense);
         LOGGER.info("new expense is added successfully");
         return "redirect:/";

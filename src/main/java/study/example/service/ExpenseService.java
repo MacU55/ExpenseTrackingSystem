@@ -46,7 +46,7 @@ public class ExpenseService {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
     }
-
+    //to download image file (photoProof)
     public Expense getFile(int fileId) {
         return repo.findById((long) fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
