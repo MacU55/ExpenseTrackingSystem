@@ -20,13 +20,13 @@ h1 {
     display: inline-block; /* Строчно-блочный элемент */
     background: #8C959D; /* Серый цвет фона */
     color: #fff; /* Белый цвет текста */
-    padding: 0.6rem 1.01rem; /* Поля вокруг текста */
+    padding: 0.6rem 0.8rem; /* Поля вокруг текста */
     text-decoration: none; /* Убираем подчёркивание */
     border-radius: 3px; /* Скругляем уголки */
    }
 
   .page{
-  width: 1000px;
+  width: 1250px;
   margin: 0 auto;
   background-color:  #f3f3f4;
   text-align:center;
@@ -36,7 +36,7 @@ h1 {
   float: left; /*Задаем обтекание*/
   line-height: 20px;/*Высота строки +  верт. центрирования текста*/
   font-size: 10px;
-  width: 270px; /*Фиксируем ширину блока*/
+  width: 300px; /*Фиксируем ширину блока*/
   height: 120px;
   margin-right: 5px;
   margin-left: 5px;
@@ -78,7 +78,7 @@ h1 {
     <!--/div-->
     <hr>
 
-    <div class="d-block my-3" style="padding: 5%; margin-left: 1px">
+    <div class="d-block my-3" style="padding: 2%; margin-left: 1px">
         <form th:action="@{/}" method="post">
             <div class="d-block my-3" style="margin-left:10px">
                 <div class="block" style="margin-left:1px">
@@ -105,7 +105,7 @@ h1 {
                                 th:text="${type.label}" style="font-size:12pt; font-weight: 600;"></option>
                     </select>
                 </div>
-                <div align="right" class="d-block my-3" style="height:110px">
+                <div align="left" class="d-block my-3" style="height:110px">
                     <input type="submit" name="search" value="Search" class="btn" style="margin-right:15px"/>
                     <input type="button" value="Clear" id="btnClear" onclick="clearSearch()" class="btn"
                            style="margin-right:15px"/>
@@ -123,7 +123,9 @@ h1 {
             <th>Expense date</th>
             <th>Amount</th>
             <th>Expense type</th>
+            <th>User first name</th>
             <th>Actions</th>
+
         </tr>
         </thead>
         <tbody>
@@ -133,8 +135,8 @@ h1 {
             <td th:text="${#temporals.format(expense.expenseDate, 'yyyy-MM-dd')}">Expense date</td>
             <td th:text="${expense.amount}">Amount</td>
             <td th:text="${expense.expenseType.label}">Expense type</td>
-            <td>
-                <a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Edit</a>
+            <td th:text="${T(study.example.model.User.getFirstName())}">User first name</td>
+             <td>   <a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Edit</a>
                 <a th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Delete</a>
                 <span th:unless="${expense.photoProof==null}"><a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}"
                                                                  class="btn" style="float:left">Download photo</a>

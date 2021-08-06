@@ -5,10 +5,11 @@ import com.opencsv.bean.CsvBindByName;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "users")
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +37,18 @@ public class Users {
     @CsvBindByName
     private String userPassword;
 
-    public Users() {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenseList;
+
+    public List<Expense> getExpenseList() {
+        return expenseList;
+    }
+
+    public User() {
 
     }
 
-    public Users(Long id, String email, String firstName, String lastName, String userPassword) {
+    public User(Long id, String email, String firstName, String lastName, String userPassword) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;

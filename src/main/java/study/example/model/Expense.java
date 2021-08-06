@@ -53,20 +53,21 @@ public class Expense {
     @Column(name = "photoProof")
     private byte[] photoProof;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
+
     public Expense() {
     }
 
     public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, byte[] photoProof) {
-        super();
         this.id = id;
         this.description = description;
         this.expenseDate = expenseDate;
         this.amount = amount;
         this.expenseType = expenseType;
         this.photoProof = photoProof;
-    }
-
-    public Expense(String fileName, String contentType, byte[] bytes) {
     }
 
     public Long getId() {
