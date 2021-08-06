@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-         <hibernate-validatorVersion>6.0.13.Final</hibernate-validatorVersion>
+        <hibernate-validatorVersion>6.0.13.Final</hibernate-validatorVersion>
         <javax.validationVersion>2.0.1.Final</javax.validationVersion>
         <spring-boot-maven-pluginVersion>2.5.2</spring-boot-maven-pluginVersion>
         <thymeleafVersion>3.0.11.RELEASE</thymeleafVersion>
@@ -34,13 +34,35 @@
             <artifactId>thymeleaf-spring5</artifactId>
             <version>${thymeleaf-spring5Version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-java8time</artifactId>
+            <version>3.0.4.RELEASE</version>
+        </dependency>
+
+        <!-- Bootstrap and JQuery from Webjars-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
+        </dependency>
+
+        <!-- Spring Boot-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>5.2.2.RELEASE</version>
         </dependency>
-
-        <!-- Spring Boot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -80,12 +102,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-java8time</artifactId>
-            <version>3.0.4.RELEASE</version>
-        </dependency>
-
         <!-- logging slf4j-->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -109,7 +125,7 @@
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
             <version>${javax.validationVersion}</version>
-            </dependency>
+        </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>

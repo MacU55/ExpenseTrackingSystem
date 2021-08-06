@@ -5,11 +5,13 @@ import com.opencsv.bean.CsvBindByName;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
+
 
 @Entity
 @Table(name = "users", schema = "users")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +34,10 @@ public class User {
     @CsvBindByName
     private String lastName;
 
-    @Column(name = "user_password")
+    @Column(name = "user_password", nullable = false)
     @NotBlank(message = "Password name must not be empty")
     @CsvBindByName
-    private String userPassword;
+    private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenseList;
@@ -48,12 +50,12 @@ public class User {
 
     }
 
-    public User(Long id, String email, String firstName, String lastName, String userPassword) {
+    public User(Long id, String email, String firstName, String lastName, String password) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userPassword = userPassword;
+        this.password = password;
     }
 
     public Long getId() {
@@ -88,12 +90,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -103,7 +105,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", userPassword='" + userPassword + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

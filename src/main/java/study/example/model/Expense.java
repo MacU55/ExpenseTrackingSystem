@@ -10,6 +10,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 
 
 @Entity
@@ -52,6 +53,10 @@ public class Expense {
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "photoProof")
     private byte[] photoProof;
+
+    @Column(name = "user_id")
+    @CsvBindByName
+    private Long userId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -118,6 +123,14 @@ public class Expense {
         this.photoProof = photoProof;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Expense{" +
@@ -126,7 +139,8 @@ public class Expense {
                 ", expenseDate=" + expenseDate +
                 ", amount=" + amount +
                 ", expenseType=" + expenseType +
-                ", photoProof=" + photoProof +
+                ", photoProof=" + Arrays.toString(photoProof) +
+                ", userId=" + userId +
                 '}';
     }
 }

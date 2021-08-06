@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,8 @@ import org.supercsv.prefs.CsvPreference;
 import study.example.config.ResponseMessage;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
+import study.example.model.User;
+import study.example.repository.UserRepository;
 import study.example.service.ExpenseService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,13 +48,50 @@ public class AppController {
     @Autowired
     private ExpenseService service;
 
+    @Autowired
+    private UserRepository userRepo;
+
     @ModelAttribute
     LocalDate initLocalDate() {
         return LocalDate.now();
     }
 
-    // handling start page
-    @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
+    //start page
+    @GetMapping("")
+    public String viewStartPage() {
+        return "welcome";
+    }
+
+    //start page
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+
+        return "signup_form";
+    }
+    // handling register process
+    @PostMapping("/process_register")
+    public String processRegister(User user) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
+        userRepo.save(user);
+
+        return "register_success";
+    }
+
+    @GetMapping("/users")
+    public String listUsers(Model model) {
+        List<User> listUsers = userRepo.findAll();
+        model.addAttribute("listUsers", listUsers);
+
+        return "users";
+    }
+
+
+    // handling expense list page
+    @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.POST})
     public String viewHomePage(
             Model model,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
