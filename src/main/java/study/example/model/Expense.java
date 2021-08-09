@@ -66,13 +66,14 @@ public class Expense {
     public Expense() {
     }
 
-    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, byte[] photoProof) {
+    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, byte[] photoProof, Long userId) {
         this.id = id;
         this.description = description;
         this.expenseDate = expenseDate;
         this.amount = amount;
         this.expenseType = expenseType;
         this.photoProof = photoProof;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -123,7 +124,7 @@ public class Expense {
         this.photoProof = photoProof;
     }
 
-    public Long getUserId() {
+    public Long getUserId(Long id) {
         return userId;
     }
 
@@ -139,7 +140,6 @@ public class Expense {
                 ", expenseDate=" + expenseDate +
                 ", amount=" + amount +
                 ", expenseType=" + expenseType +
-                ", photoProof=" + Arrays.toString(photoProof) +
                 ", userId=" + userId +
                 '}';
     }

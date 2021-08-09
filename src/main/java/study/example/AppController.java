@@ -10,6 +10,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +30,7 @@ import study.example.model.ExpenseType;
 import study.example.model.User;
 import study.example.repository.UserRepository;
 import study.example.service.ExpenseService;
+import study.example.service.CustomUserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,17 +63,25 @@ public class AppController {
     //start page
     @GetMapping("")
     public String viewStartPage() {
-        return "welcome";
+        return "start";
     }
 
-    //start page
+    //show registration form
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
 
         return "signup_form";
     }
-    // handling register process
+
+    //show registration form
+    @GetMapping("/index")
+    public String showIndexPage() {
+
+        return "index";
+    }
+
+    // make register process
     @PostMapping("/process_register")
     public String processRegister(User user) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -81,6 +93,7 @@ public class AppController {
         return "register_success";
     }
 
+    // show users list
     @GetMapping("/users")
     public String listUsers(Model model) {
         List<User> listUsers = userRepo.findAll();
@@ -89,26 +102,31 @@ public class AppController {
         return "users";
     }
 
-
     // handling expense list page
-    @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/expense_list", method = {RequestMethod.GET, RequestMethod.POST})
     public String viewHomePage(
             Model model,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
             @RequestParam(required = false) ExpenseType expenseType,
-            @RequestParam(required = false) String export
+            @RequestParam(required = false) String export,
+            @AuthenticationPrincipal UserDetails currentUser
     ) {
         if (export != null) {
             return "forward:/export";
         }
+        User user = (User) userRepo.findByEmail(currentUser.getUsername());
+        model.addAttribute("currentUserId", user.getId());
+        //Long userId = user.getId();
+
         List<Expense> expenseList = service.listAll(startExpenseDate, finishExpenseDate, expenseType);
+        //Expense expense =
         model.addAttribute("expenseList", expenseList);
         LOGGER.info("expense list was returned successfully");
         model.addAttribute("startExpenseDate", startExpenseDate);
         model.addAttribute("finishExpenseDate", finishExpenseDate);
         model.addAttribute("expenseType", expenseType);
-        return "index";
+        return "expense_list";
     }
 
     // handling to download csv file by selecting dates range
@@ -178,21 +196,27 @@ public class AppController {
     public String saveExpense(
             @Valid @ModelAttribute("expense") Expense expense,
             BindingResult bindingResult,
-            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile, Model model,
+            @AuthenticationPrincipal UserDetails currentUser
+
     ) throws SQLException, IOException {
 
         if (bindingResult.hasErrors()) {
             LOGGER.error("incorrect data in  form");
             return "edit_expense";
         }
-        //service.saveImageToDatabase(imageFile);
         if (!imageFile.isEmpty()) {
             expense.setPhotoProof(imageFile.getBytes());
         }
 
+        User user = (User) userRepo.findByEmail(currentUser.getUsername());
+        model.addAttribute("currentUser", user);
+        Long userId = user.getId();
+        //model.addAttribute("userId", userId);
+        expense.setUserId(userId);
         service.save(expense);
         LOGGER.info("new expense is added successfully");
-        return "redirect:/";
+        return "expense_list";
     }
 
     // handling to edit selected expense
@@ -210,7 +234,7 @@ public class AppController {
     public String deleteExpense(@PathVariable(name = "id") int id) {
         service.delete(id);
         LOGGER.info("selected expense was deleted successfully");
-        return "redirect:/";
+        return "forward:/expense_list";
     }
 
     // handling to download photo proof from database for selected expense

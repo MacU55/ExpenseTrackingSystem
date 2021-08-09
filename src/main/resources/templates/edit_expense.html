@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8"/>
     <title>Create New Expense</title>
@@ -21,6 +22,9 @@
        });
    });
 
+
+
+
     </script>
     <style>
     span {
@@ -35,6 +39,7 @@
     text-decoration: none; /* Убираем подчёркивание */
     border-radius: 3px; /* Скругляем уголки */
    }
+
 
 
 
@@ -93,11 +98,16 @@
             </div>
         </div>
 
+        <div align="left" class="d-block my-3" sec:authorize="isAuthenticated()">
+        <p >User id <span sec:authentication="user_id"></span></p>
+        </div>
+
         <div align="left" class="d-block my-3">
             <button type="submit" class="btn">Save</button>
         </div>
+
         <div align="left" class="d-block my-3">
-            <a th:href="@{'/'}" class="btn ">Back to expenses list</a>
+            <a th:href="@{'/expense_list'}" class="btn ">Back to expenses list</a>
         </div>
 
     </form>
