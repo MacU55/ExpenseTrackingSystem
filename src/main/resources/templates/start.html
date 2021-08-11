@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Welcome to Expense list!</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!--link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" /-->
+  <!--script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script-->
+  <!--script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script-->
+</head>
+<body>
+<div class="container text-center">
+  <h1>Expense tracking system</h1>
+  <hr align="center" width="500" size="2" color="#ff0000" />
+  <br><br>
+  <h4>Choose option:</h4>
+  <br>
+  <h2><a th:href="@{/login}"> Login </a></h2>
+  <br>
+  <h2><a th:href="@{/register}"> Register </a></h2>
+  <br>
+</div>
+
+</body>
+</html>

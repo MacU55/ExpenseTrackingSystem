@@ -117,12 +117,12 @@ public class AppController {
         }
         User user = (User) userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUserId", user.getId());
-        //Long userId = user.getId();
-
+        model.addAttribute("user", user);
         List<Expense> expenseList = service.listAll(startExpenseDate, finishExpenseDate, expenseType);
-        //Expense expense =
         model.addAttribute("expenseList", expenseList);
         LOGGER.info("expense list was returned successfully");
+        List<User> listUsers = userRepo.findAll();
+        model.addAttribute("listUsers", listUsers);
         model.addAttribute("startExpenseDate", startExpenseDate);
         model.addAttribute("finishExpenseDate", finishExpenseDate);
         model.addAttribute("expenseType", expenseType);
@@ -214,9 +214,10 @@ public class AppController {
         Long userId = user.getId();
         //model.addAttribute("userId", userId);
         expense.setUserId(userId);
+        LOGGER.info("user id is assigned to expense successfully");
         service.save(expense);
         LOGGER.info("new expense is added successfully");
-        return "expense_list";
+        return "redirect:/expense_list";
     }
 
     // handling to edit selected expense

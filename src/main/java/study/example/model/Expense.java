@@ -10,7 +10,6 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
 
 
 @Entity
@@ -124,12 +123,20 @@ public class Expense {
         this.photoProof = photoProof;
     }
 
-    public Long getUserId(Long id) {
+    public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
