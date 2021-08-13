@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:margin="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Restrict permissions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <style>
+    .btn {
+  display: inline-block; /* Строчно-блочный элемент */
+  background: #8C959D; /* Серый цвет фона */
+  color: #fff; /* Белый цвет текста */
+  padding: 0.6rem 0.8rem; /* Поля вокруг текста */
+  text-decoration: none; /* Убираем подчёркивание */
+  border-radius: 3px; /* Скругляем уголки */
+  font-size: 150%;
+  }
+
+    </style>
+
+</head>
+<body>
+<div align="center" style="margin-top:60px; color:red"><h1>You have insufficient permissions to operate this record!
+</h1></div>
+
+<div align="center">
+    <h2>(You can operate just own records)</h2></div>
+<div align="center" style="margin-top:60px">
+    <a th:href="@{'/expense_list'}" class="btn">Back to expenses list</a>
+</div>
+
+
+</body>
+</html>

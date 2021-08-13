@@ -13,7 +13,7 @@
     <br>
     <div>
         <form th:action="@{/logout}" method="post">
-            <p>
+            <p >
                 Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
             </p>
             <input type="submit" value="Sign Out"/>

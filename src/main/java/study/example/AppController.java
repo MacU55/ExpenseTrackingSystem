@@ -6,12 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,7 +26,6 @@ import study.example.model.ExpenseType;
 import study.example.model.User;
 import study.example.repository.UserRepository;
 import study.example.service.ExpenseService;
-import study.example.service.CustomUserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,15 +37,18 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Controller
 public class AppController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AppController.class);
+    public static final String NO_PERMISSIONS_HTML = "/no_permissions.html";
+    public static final String REDIRECT_NO_PERMISSIONS_HTML = "redirect:" + NO_PERMISSIONS_HTML;
 
     @Autowired
-    private ExpenseService service;
+    private ExpenseService expenseService;
 
     @Autowired
     private UserRepository userRepo;
@@ -70,14 +68,12 @@ public class AppController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
-
         return "signup_form";
     }
 
     //show registration form
     @GetMapping("/index")
     public String showIndexPage() {
-
         return "index";
     }
 
@@ -87,9 +83,7 @@ public class AppController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-
         userRepo.save(user);
-
         return "register_success";
     }
 
@@ -98,7 +92,6 @@ public class AppController {
     public String listUsers(Model model) {
         List<User> listUsers = userRepo.findAll();
         model.addAttribute("listUsers", listUsers);
-
         return "users";
     }
 
@@ -118,7 +111,7 @@ public class AppController {
         User user = (User) userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUserId", user.getId());
         model.addAttribute("user", user);
-        List<Expense> expenseList = service.listAll(startExpenseDate, finishExpenseDate, expenseType);
+        List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
         model.addAttribute("expenseList", expenseList);
         LOGGER.info("expense list was returned successfully");
         List<User> listUsers = userRepo.findAll();
@@ -146,7 +139,7 @@ public class AppController {
         String headerValue = "attachment; filename=expenses_" + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
-        List<Expense> expenseList = service.listAll(startExpenseDate, finishExpenseDate, expenseType);
+        List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
 
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
         String[] csvHeader = {"Expense Id", "Description", "Expense date", "Amount", "Expense type"};
@@ -166,7 +159,7 @@ public class AppController {
         String message = "";
 
         try {
-            service.saveFromSCVToDatabase(file);
+            expenseService.saveFromSCVToDatabase(file);
 
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
 
@@ -212,43 +205,73 @@ public class AppController {
         User user = (User) userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUser", user);
         Long userId = user.getId();
-        //model.addAttribute("userId", userId);
         expense.setUserId(userId);
         LOGGER.info("user id is assigned to expense successfully");
-        service.save(expense);
+        expenseService.save(expense);
         LOGGER.info("new expense is added successfully");
         return "redirect:/expense_list";
     }
 
     // handling to edit selected expense
     @RequestMapping("/edit/{id}")
-    public ModelAndView showEditExpensePage(@PathVariable(name = "id") int id) {
+    public ModelAndView showEditExpensePage(@PathVariable(name = "id") int id,
+                                            @AuthenticationPrincipal UserDetails currentUser) {
+
+        User loggedUser = (User) userRepo.findByEmail(currentUser.getUsername());
+        Long loggedUserId = loggedUser.getId();
+
         ModelAndView mav = new ModelAndView("edit_expense");
-        Expense expense = service.get(id);
-        mav.addObject("expense", expense);
-        LOGGER.info("selected expense was edited successfully");
-        return mav;
+        ModelAndView mavPermissions = new ModelAndView(REDIRECT_NO_PERMISSIONS_HTML);
+        Expense expense = expenseService.get(id);
+        Long userId = expense.getUserId();
+        if (!Objects.equals(loggedUserId, userId)) {
+            return mavPermissions;
+        } else {
+            mav.addObject("expense", expense);
+            LOGGER.info("selected expense was edited successfully");
+            return mav;
+        }
+
     }
 
     // handling to delete selected expense
     @RequestMapping("/delete/{id}")
-    public String deleteExpense(@PathVariable(name = "id") int id) {
-        service.delete(id);
-        LOGGER.info("selected expense was deleted successfully");
-        return "forward:/expense_list";
+    public String deleteExpense(@PathVariable(name = "id") int id,
+
+                                @AuthenticationPrincipal UserDetails currentUser) {
+
+        User loggedUser = (User) userRepo.findByEmail(currentUser.getUsername());
+        Long loggedUserId = loggedUser.getId();
+        Expense expense = expenseService.get(id);
+        Long userId = expense.getUserId();
+        if (!Objects.equals(loggedUserId, userId)) {
+            return REDIRECT_NO_PERMISSIONS_HTML;
+        } else {
+            expenseService.delete(id);
+            LOGGER.info("selected expense was deleted successfully");
+            return "forward:/expense_list";
+        }
     }
 
     // handling to download photo proof from database for selected expense
     @RequestMapping(value = "/downLoadPhotoProof/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<Resource> downloadFile(@PathVariable(name = "id") int id) {
-        // Load file from database
-        Expense expense = service.getFile(id);
+    public ResponseEntity<Resource> downloadFile(@PathVariable(name = "id") int id,
+                                                 @AuthenticationPrincipal UserDetails currentUser) {
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("image/jpg"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expense.getId() + "\"" + ".jpg")
-                .body(new ByteArrayResource(expense.getPhotoProof()));
+        User loggedUser = (User) userRepo.findByEmail(currentUser.getUsername());
+        Long loggedUserId = loggedUser.getId();
+        Expense expense = expenseService.get(id);
+        Long userId = expense.getUserId();
+
+        if (!Objects.equals(loggedUserId, userId)) {
+            return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, NO_PERMISSIONS_HTML).build();
+        } else {
+            Expense expenseGetFile = expenseService.getInstanсe(id);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("image/jpg"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expenseGetFile.getId() + "\"" + ".jpg")
+                    .body(new ByteArrayResource(expense.getPhotoProof()));
+        }
     }
-
 }
 

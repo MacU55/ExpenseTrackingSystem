@@ -25,6 +25,9 @@
 
 
 
+
+
+
     </script>
     <style>
     span {
@@ -39,23 +42,31 @@
     text-decoration: none; /* Убираем подчёркивание */
     border-radius: 3px; /* Скругляем уголки */
    }
-
-
-
-
-
+   .labelField{
+   font-size: 12pt;
+    font-weight: 700;
+   }
     </style>
 </head>
 
 <body class="bg-light">
 <div align="center" class="container">
     <h1>Create new expense</h1>
-    <br><br>
+
+    <hr align="center" width="600" size="2" color="#ff0000"/>
+    <br>
+    <div style="float:left; margin-left:275px; color:darkblue; font-size: 12pt;
+    font-weight: 600; ">
+        You are logged as: <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+    </div>
+    <br>
+    <br>
+    <br>
     <form action="#" th:action="@{/save}" th:object="${expense}" style="width:50%" method="post"
           enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}"/>
         <div align="left" class="form-label">
-            <label>Expense description</label>
+            <label class="labelField">Expense description</label>
             <br>
             <input type="text" class="form-control" th:field="*{description}"/>
             <small id="passwordHelpBlock" class="form-text text-muted" align="left">
@@ -67,7 +78,7 @@
         </div>
 
         <div align="left" class="d-block my-3">
-            <div>Expense date</div>
+            <div class="labelField">Expense date</div>
             <input type="date" th:field="*{expenseDate}"/>
             <div>
                 <span th:if="${#fields.hasErrors('expenseDate')}" th:errors="*{expenseDate}">expenseDate err</span>
@@ -75,7 +86,7 @@
         </div>
 
         <div align="left" class="d-block my-3">
-            <div>Expense amount</div>
+            <div class="labelField">Expense amount</div>
             <input type="text" size="18" th:field="*{amount}"/>
             <div>
                 <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">amount err</span>
@@ -83,7 +94,7 @@
         </div>
 
         <div align="left" class="d-block my-3">
-            <div d-block my-3>Select type of expense</div>
+            <div d-block my-3 class="labelField">Select type of expense</div>
             <select name="expenseType" class="d-block my-3">
                 <option th:each="type : ${T(study.example.model.ExpenseType).values()}"
                         th:value="${type}" th:text="${type.label}"></option>
@@ -91,15 +102,11 @@
         </div>
 
         <div align="left" class="d-block my-3">
-            <div d-block my-3>Select file to save photo proof</div>
+            <div d-block my-3 class="labelField">Select file to save photo proof</div>
             <input id="singleFileUploadInput" type="file" name="imageFile"/>
             <div>
                 <span th:if="${#fields.hasErrors('photoProof')}" th:errors="*{photoProof}">photoProof err</span>
             </div>
-        </div>
-
-        <div align="left" class="d-block my-3" sec:authorize="isAuthenticated()">
-        <p>User id <span sec:authentication="user_id"></span></p>
         </div>
 
         <div align="left" class="d-block my-3">
@@ -107,7 +114,7 @@
         </div>
 
         <div align="left" class="d-block my-3">
-            <a th:href="@{'/expense_list'}" class="btn ">Back to expenses list</a>
+            <a th:href="@{'/expense_list'}" class="btn">Back to expenses list</a>
         </div>
 
     </form>

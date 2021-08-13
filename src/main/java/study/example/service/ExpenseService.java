@@ -1,8 +1,14 @@
 package study.example.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import study.example.exceptions.MyFileNotFoundException;
 import study.example.model.Expense;
@@ -46,10 +52,20 @@ public class ExpenseService {
             throw new RuntimeException("fail to store csv data: " + e.getMessage());
         }
     }
-    //to download image file (photoProof)
-    public Expense getFile(int fileId) {
+
+    //to find image file for downloading (photoProof)
+    public Expense getInstanсe(int fileId) {
         return repo.findById((long) fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
+    }
+
+    // to download image file (photoProof)
+    public ResponseEntity<Resource> firstdownloadPhotoProof(Expense expense){
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("image/jpg"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expense.getId() + "\"" + ".jpg")
+                .body(new ByteArrayResource(expense.getPhotoProof()));
     }
 }
 

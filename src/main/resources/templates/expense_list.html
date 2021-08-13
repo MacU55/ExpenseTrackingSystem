@@ -54,6 +54,7 @@ h1 {
   }
 
 
+
     </style>
 </head>
 <body>
@@ -61,7 +62,7 @@ h1 {
     <h1>Expense list</h1>
     <hr>
     <div style="margin:1px; float:right; width:200px">
-    <h3 ><a th:href="@{/users}" class="btn"> List of users </a></h3>
+        <h3><a th:href="@{/users}" class="btn"> List of users </a></h3>
     </div>
     <div class="d-block my-3" style="width:200px; align:left; margin-left: 30px">
         <a href="new" class="btn" style="width:200px; align:left ">Create new expense</a>
@@ -125,8 +126,7 @@ h1 {
             <th>Expense date</th>
             <th>Amount</th>
             <th>Expense type</th>
-            <th>User id</th>
-            <!--th>User first name</th-->
+            <th>User email</th>
             <th>Actions</th>
 
         </tr>
@@ -138,10 +138,9 @@ h1 {
             <td th:text="${#temporals.format(expense.expenseDate, 'yyyy-MM-dd')}">Expense date</td>
             <td th:text="${expense.amount}">Amount</td>
             <td th:text="${expense.expenseType.label}">Expense type</td>
-            <td th:text="${expense.user.email}">User id</td>
+            <td th:text="${expense.user?.email}">User email</td>
 
-            <!--td th:text="${T(study.example.model.User.getFirstName())}">User first name</td-->
-             <td>   <a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Edit</a>
+            <td><a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Edit</a>
                 <a th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Delete</a>
                 <span th:unless="${expense.photoProof==null}"><a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}"
                                                                  class="btn" style="float:left">Download photo</a>
@@ -155,6 +154,7 @@ h1 {
 	function clearSearch() {
 		window.location = "[[@{/}]]";
 	}
+
 
 
 
