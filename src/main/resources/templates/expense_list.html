@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:margin="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Expense Manager</title>
@@ -55,6 +55,7 @@ h1 {
 
 
 
+
     </style>
 </head>
 <body>
@@ -74,8 +75,8 @@ h1 {
         <!-- form to insert data from csv file to database -->
         <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
             <input id="singleFileUploadInput" type="file" name="CSVFile" required
-                   style="font-size:12pt; font-weight: 600;"/>
-            <button type="submit" style="font-size:12pt; font-weight: 600;">Submit</button>
+                   style="font-size:12pt; font-weight: 600;" />
+            <button type="submit" style="font-size:12pt; font-weight: 600;" class="btn">Submit</button>
         </form>
     </div>
 
@@ -121,11 +122,23 @@ h1 {
     <table border="0" cellpadding="10" class="table table-striped" style="width:100%;align:center;">
         <thead>
         <tr>
-            <th>Expense ID</th>
-            <th>Description</th>
-            <th>Expense date</th>
-            <th>Amount</th>
-            <th>Expense type</th>
+            <th>
+                <a th:href="@{'/expense_list/page/' + ${currentPage} + '?sortField=Expense.id&sortDir=' + ${reverseSortDir}}">Expense ID</a>
+            </th>
+            <th>
+                <a th:href="@{'/expense_list/page/' + ${currentPage} + '?sortField=Expense.description&sortDir=' + ${reverseSortDir}}">Description</a>
+            </th>
+            <th>
+                <a th:href="@{'/expense_list/page/' + ${currentPage} + '?sortField=Expense.expenseDate&sortDir=' + ${reverseSortDir}}">Expense
+                    date</a>
+            </th>
+            <th>
+                <a th:href="@{'/expense_list/page/' + ${currentPage} + '?sortField=Expense.amount&sortDir=' + ${reverseSortDir}}">Amount</a>
+            </th>
+            <th>
+                <a th:href="@{'/expense_list/page/' + ${currentPage} + '?sortField=Expense.expenseType&sortDir=' + ${reverseSortDir}}">Expense
+                    type</a>
+            </th>
             <th>User email</th>
             <th>Actions</th>
 
@@ -149,11 +162,45 @@ h1 {
         </tr>
         </tbody>
     </table>
+    <div></div>
+    <div><i>Sorted by [[${sortField}]] in [[${sortDir}]] order</i></div>
+    <div></div>
+    <div th:if="${totalPages > 1}">
+        Total Items: [[${totalItems}]]
+
+
+        <a th:if="${currentPage > 1}" th:href="@{'/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
+        <span th:unless="${currentPage > 1}">First</span>
+
+
+        <a th:if="${currentPage > 1}"
+           th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+        <span th:unless="${currentPage > 1}">Previous</span>
+
+
+        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+			<a th:if="${currentPage != i}"
+               th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+			<span th:unless="${currentPage != i}">[[${i}]]</span>
+
+		</span>
+
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+        <span th:unless="${currentPage < totalPages}">Next</span>
+
+
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+        <span th:unless="${currentPage < totalPages}">Last</span>
+    </div>
+
 </div>
 <script type="text/javascript">
 	function clearSearch() {
 		window.location = "[[@{/}]]";
 	}
+
 
 
 

@@ -3,6 +3,10 @@ package study.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +31,19 @@ public class ExpenseService {
     @Autowired
     private ExpenseRepository repo;
 
-    public List<Expense> listAll(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType) {
-        return repo.findExpensesByDateAndType(startExpenseDate, finishExpenseDate, expenseType);
+    public List<Expense> listAllForExport(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType) {
+        return repo.findExpensesByDateAndTypeForExport(startExpenseDate, finishExpenseDate, expenseType);
+    }
+
+    public Page<Expense> listAll(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType,
+          int pageNum, String sortField, String sortDir) {
+
+                Pageable pageable = PageRequest.of(pageNum - 1, 5,
+                sortDir.equals("asc") ? Sort.by(sortField).ascending()
+                        : Sort.by(sortField).descending()
+                );
+
+        return repo.findExpensesByDateAndType(pageable, startExpenseDate, finishExpenseDate, expenseType);
     }
 
     public void save(Expense expense) {
@@ -54,7 +69,7 @@ public class ExpenseService {
     }
 
     //to find image file for downloading (photoProof)
-    public Expense getInstanсe(int fileId) {
+    public Expense getInstance(int fileId) {
         return repo.findById((long) fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
     }

@@ -1,18 +1,21 @@
 package study.example.repository;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface ExpenseRepositoryCustom {
 
-    List<Expense> findExpensesByDateAndType(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType);
+    List<Expense> findExpensesByDateAndTypeForExport(LocalDate startExpenseDate,
+                                                     LocalDate finishExpenseDate,
+                                                     ExpenseType expenseType);
 
-
-
+    Page<Expense> findExpensesByDateAndType(Pageable pageable,
+                                            LocalDate startExpenseDate,
+                                            LocalDate finishExpenseDate,
+                                            ExpenseType expenseType);
 }

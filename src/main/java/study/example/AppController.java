@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -95,23 +97,63 @@ public class AppController {
         return "users";
     }
 
-    // handling expense list page
+    //handling default (by URL) expense list page, not for viewing
     @RequestMapping(value = "/expense_list", method = {RequestMethod.GET, RequestMethod.POST})
-    public String viewHomePage(
+    public String ordinalPage(
             Model model,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
             @RequestParam(required = false) ExpenseType expenseType,
             @RequestParam(required = false) String export,
             @AuthenticationPrincipal UserDetails currentUser
+    )
+    {
+        return viewHomePage(model, startExpenseDate, finishExpenseDate, expenseType,  export,  currentUser,1,
+                "id",
+                "asc"
+        );
+    }
+
+    // handling expense list page for viewing
+    @RequestMapping(value = "/expense_list/page/{pageNum}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String viewHomePage(
+            Model model,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
+            @RequestParam(required = false) ExpenseType expenseType,
+            @RequestParam(required = false) String export,
+            @AuthenticationPrincipal UserDetails currentUser,
+            @PathVariable(name = "pageNum") int pageNum,
+            @Param("sortField") String sortField,
+            @Param("sortDir") String sortDir
+
     ) {
         if (export != null) {
             return "forward:/export";
         }
+
+        Page<Expense> page = expenseService.listAll(startExpenseDate,
+                finishExpenseDate,
+                expenseType,
+                pageNum,
+                sortField,
+                sortDir);
+
+        List<Expense> expenseList = page.getContent();
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        model.addAttribute("expenseList", expenseList);
+
         User user = (User) userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUserId", user.getId());
         model.addAttribute("user", user);
-        List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
+       // List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
         model.addAttribute("expenseList", expenseList);
         LOGGER.info("expense list was returned successfully");
         List<User> listUsers = userRepo.findAll();
@@ -130,6 +172,10 @@ public class AppController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
             HttpServletRequest httpServletRequest, @RequestParam(required = false) ExpenseType expenseType
+           // @PathVariable(name = "pageNum") int pageNum,
+           // @Param("sortField") String sortField,
+           // @Param("sortDir") String sortDir
+
     ) throws IOException {
         response.setContentType("text/csv");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
@@ -139,7 +185,7 @@ public class AppController {
         String headerValue = "attachment; filename=expenses_" + currentDateTime + ".csv";
         response.setHeader(headerKey, headerValue);
 
-        List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
+        List<Expense> expenseList = expenseService.listAllForExport(startExpenseDate, finishExpenseDate, expenseType);
 
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
         String[] csvHeader = {"Expense Id", "Description", "Expense date", "Amount", "Expense type"};
@@ -266,7 +312,7 @@ public class AppController {
         if (!Objects.equals(loggedUserId, userId)) {
             return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, NO_PERMISSIONS_HTML).build();
         } else {
-            Expense expenseGetFile = expenseService.getInstanсe(id);
+            Expense expenseGetFile = expenseService.getInstance(id);
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType("image/jpg"))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expenseGetFile.getId() + "\"" + ".jpg")

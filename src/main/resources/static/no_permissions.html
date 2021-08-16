@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns:margin="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
 <head>
     <meta charset="UTF-8">
     <title>Restrict permissions</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
     <style>
     .btn {
@@ -17,6 +19,7 @@
   font-size: 150%;
   }
 
+
     </style>
 
 </head>
@@ -25,10 +28,19 @@
 </h1></div>
 
 <div align="center">
-    <h2>(You can operate just own records)</h2></div>
-<div align="center" style="margin-top:60px">
-    <a th:href="@{'/expense_list'}" class="btn">Back to expenses list</a>
+    <h2>(You can operate just own records)</h2>
 </div>
+
+
+<form id="hotDealForm" th:action="@{/expense_list}" method="get">
+
+    <div align="center">
+
+        <br/>
+        <input type="button" value="Back to Expense list " class="btn btn-red"/>
+    </div>
+
+</form>
 
 
 </body>
