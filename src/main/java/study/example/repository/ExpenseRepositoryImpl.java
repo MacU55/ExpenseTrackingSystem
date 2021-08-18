@@ -54,4 +54,3 @@ public class ExpenseRepositoryImpl implements ExpenseRepositoryCustom {
         return em.createQuery(cq).getResultList();
     }
 }
-

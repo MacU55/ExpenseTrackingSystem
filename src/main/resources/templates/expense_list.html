@@ -61,7 +61,7 @@ h1 {
 <div class="page">
     <h1>Expense list</h1>
     <hr>
-    <div style="margin:1px; float:right; width:200px">
+    <div style="margin:1px; float:right; width:180px">
         <h3><a th:href="@{/users}" class="btn"> List of users </a></h3>
     </div>
     <div class="d-block my-3" style="width:200px; align:left; margin-left: 30px">
@@ -74,8 +74,8 @@ h1 {
         <!-- form to insert data from csv file to database -->
         <form th:action="@{/upload}" method="post" enctype="multipart/form-data">
             <input id="singleFileUploadInput" type="file" name="CSVFile" required
-                   style="font-size:12pt; font-weight: 600;"/>
-            <button type="submit" style="font-size:12pt; font-weight: 600;">Submit</button>
+                   style="font-size:12pt; font-weight:600; margin-right:300px" />
+            <button type="submit" style="font-size:12pt; font-weight: 600;margin-right:85px" class="btn">Submit</button>
         </form>
     </div>
 
@@ -152,12 +152,8 @@ h1 {
 </div>
 <script type="text/javascript">
 	function clearSearch() {
-		window.location = "[[@{/}]]";
+		window.location = "[[@{/expense_list}]]";
 	}
-
-
-
-
 </script>
 </body>
 </html>

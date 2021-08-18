@@ -1,0 +1,44 @@
+body {
+  background-color: #c0c1c9;
+}
+h1 {
+  color: maroon;
+  margin-left: 40px;
+  }
+
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff; /* Белый цвет текста */
+    padding: 0.6rem 1.01rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+
+  .page{
+  width: 1000px;
+  margin: 0 auto;
+  background-color:  #f3f3f4;
+  text-align:center;
+  align="center"
+  }
+  .block{
+  float: left; /*Задаем обтекание*/
+  line-height: 20px;/*Высота строки +  верт. центрирования текста*/
+  font-size: 10px;
+  width: 270px; /*Фиксируем ширину блока*/
+  height: 120px;
+  margin-right: 5px;
+  margin-left: 5px;
+  padding: 10px 10px;
+  text-align: left; /*Центрируем текст по горизонтали*/
+ /*border: 1px solid #e6eef4;*/
+  border-radius: 3px;
+
+  span {
+  	color: red;
+  	font-style: italic;
+  }
+  select{
+  width: 175px;
+  }

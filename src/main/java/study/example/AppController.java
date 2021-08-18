@@ -142,8 +142,8 @@ public class AppController {
         List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
 
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Expense Id", "Description", "Expense date", "Amount", "Expense type"};
-        String[] nameMapping = {"id", "description", "expenseDate", "amount", "expenseType"};
+        String[] csvHeader = {"Expense Id", "Description", "Expense date", "Amount", "Expense type", "User Id"};
+        String[] nameMapping = {"id", "description", "expenseDate", "amount", "expenseType", "userId"};
 
         csvWriter.writeHeader(csvHeader);
 
