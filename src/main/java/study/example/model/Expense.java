@@ -10,6 +10,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 
 
 @Entity
@@ -57,6 +58,11 @@ public class Expense {
     @CsvBindByName
     private Long userId;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    @CsvBindByName
+    private Status status;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
@@ -65,7 +71,9 @@ public class Expense {
     public Expense() {
     }
 
-    public Expense(Long id, String description, LocalDate expenseDate, BigDecimal amount, ExpenseType expenseType, byte[] photoProof, Long userId) {
+    public Expense(Long id, String description, LocalDate expenseDate,
+                   BigDecimal amount, ExpenseType expenseType, byte[] photoProof,
+                   Long userId, Status status, User user) {
         this.id = id;
         this.description = description;
         this.expenseDate = expenseDate;
@@ -73,6 +81,8 @@ public class Expense {
         this.expenseType = expenseType;
         this.photoProof = photoProof;
         this.userId = userId;
+        this.status = status;
+        this.user = user;
     }
 
     public Long getId() {
@@ -139,6 +149,14 @@ public class Expense {
         this.user = user;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Expense{" +
@@ -147,7 +165,10 @@ public class Expense {
                 ", expenseDate=" + expenseDate +
                 ", amount=" + amount +
                 ", expenseType=" + expenseType +
+                ", photoProof=" + Arrays.toString(photoProof) +
                 ", userId=" + userId +
+                ", status=" + status +
+                ", user=" + user +
                 '}';
     }
 }

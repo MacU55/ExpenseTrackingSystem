@@ -127,6 +127,7 @@ h1 {
             <th>Amount</th>
             <th>Expense type</th>
             <th>User email</th>
+            <th>Status</th>
             <th>Actions</th>
 
         </tr>
@@ -139,6 +140,7 @@ h1 {
             <td th:text="${expense.amount}">Amount</td>
             <td th:text="${expense.expenseType.label}">Expense type</td>
             <td th:text="${expense.user?.email}">User email</td>
+            <td th:text="${expense.status.label}">Status</td>
 
             <td><a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Edit</a>
                 <a th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Delete</a>

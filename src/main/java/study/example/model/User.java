@@ -4,7 +4,6 @@ import com.opencsv.bean.CsvBindByName;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -39,23 +38,25 @@ public class User implements Serializable {
     @CsvBindByName
     private String password;
 
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    @CsvBindByName
+    private Role role;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenseList;
 
-    public List<Expense> getExpenseList() {
-        return expenseList;
-    }
-
     public User() {
-
     }
 
-    public User(Long id, String email, String firstName, String lastName, String password) {
+    public User(Long id, String email, String firstName, String lastName, String password, Role role, List<Expense> expenseList) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.role = role;
+        this.expenseList = expenseList;
     }
 
     public Long getId() {
@@ -98,14 +99,32 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<Expense> getExpenseList() {
+        return expenseList;
+    }
+
+    public void setExpenseList(List<Expense> expenseList) {
+        this.expenseList = expenseList;
+    }
+
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
+                ", expenseList=" + expenseList +
                 '}';
     }
 }

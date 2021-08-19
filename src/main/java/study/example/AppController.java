@@ -202,7 +202,7 @@ public class AppController {
             expense.setPhotoProof(imageFile.getBytes());
         }
 
-        User user = (User) userRepo.findByEmail(currentUser.getUsername());
+        User user = userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUser", user);
         Long userId = user.getId();
         expense.setUserId(userId);
