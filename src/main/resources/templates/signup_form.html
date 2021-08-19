@@ -52,7 +52,7 @@
                 <label class="col-4 col-form-label">Select Your Role: </label>
                 <select name="role" class="d-block my-3">
                     <option th:each="type : ${T(study.example.model.Role).values()}"
-                            th:value="${type}" th:text="${role.label}"></option>
+                            th:value="${type}" th:text="${type.label}"></option>
                 </select>
 
             </div >

@@ -58,10 +58,10 @@ public class Expense {
     @CsvBindByName
     private Long userId;
 
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition ="varchar(45) default 'PENDING'")
     @Enumerated(EnumType.STRING)
     @CsvBindByName
-    private Status status;
+    private Status status = Status.PENDING;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
