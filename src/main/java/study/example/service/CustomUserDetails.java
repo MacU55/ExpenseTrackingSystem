@@ -1,9 +1,11 @@
 package study.example.service;
 
-import java.util.Collection;
+import java.util.*;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import study.example.model.Role;
 import study.example.model.User;
 
 public class CustomUserDetails implements UserDetails {
@@ -13,10 +15,29 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(User user) {
         this.user = user;
     }
-
+// original
+    /*
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }
+
+     */
+
+    //
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        EnumSet<Role> roles = user.getRoleSet();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getLabel()));
+        }
+        return authorities;
+    }
+
+    public boolean hasRole(String roleName) {
+        return this.user.hasRole(roleName);
     }
 
     @Override
@@ -54,7 +75,9 @@ public class CustomUserDetails implements UserDetails {
     }
 
 
-    public Long getUserId(){ return user.getId();}
+    public Long getUserId() {
+        return user.getId();
+    }
 
 }
 

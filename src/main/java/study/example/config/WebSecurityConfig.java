@@ -18,6 +18,7 @@ import study.example.service.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private DataSource dataSource;
 
@@ -44,7 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
-
+/*
+// original method
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -58,6 +60,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutSuccessUrl("/").permitAll();
     }
+
+ */
+
+    // new
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+//                .loginPage("/login")
+
+                .usernameParameter("email")
+                .successHandler(loginSuccessHandler)
+                .permitAll()
+                .and()
+                .logout().permitAll();
+    }
+
+
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
 
 
 }

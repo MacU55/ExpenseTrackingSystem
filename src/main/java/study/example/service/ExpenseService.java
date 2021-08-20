@@ -54,7 +54,7 @@ public class ExpenseService {
     }
 
     //to find image file for downloading (photoProof)
-    public Expense getInstanсe(int fileId) {
+    public Expense getInstance(int fileId) {
         return repo.findById((long) fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
     }

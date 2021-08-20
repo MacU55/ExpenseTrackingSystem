@@ -71,7 +71,7 @@ public class AppController {
         return "signup_form";
     }
 
-    //show registration form
+    //show page after login
     @GetMapping("/index")
     public String showIndexPage() {
         return "index";
@@ -266,7 +266,7 @@ public class AppController {
         if (!Objects.equals(loggedUserId, userId)) {
             return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, NO_PERMISSIONS_HTML).build();
         } else {
-            Expense expenseGetFile = expenseService.getInstanсe(id);
+            Expense expenseGetFile = expenseService.getInstance(id);
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType("image/jpg"))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expenseGetFile.getId() + "\"" + ".jpg")
