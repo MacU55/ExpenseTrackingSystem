@@ -111,6 +111,7 @@ public class AppController {
         User user = (User) userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUserId", user.getId());
         model.addAttribute("user", user);
+        LOGGER.info("User's email is : " + user.getEmail() +", " + "and user's role is : " + user.getRole());
         List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
         model.addAttribute("expenseList", expenseList);
         LOGGER.info("expense list was returned successfully");

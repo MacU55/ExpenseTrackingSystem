@@ -43,9 +43,10 @@ public class User implements Serializable {
     @CsvBindByName
     private Role role;
 
-    private EnumSet<Role> roleSet = EnumSet.allOf(Role.class);
+    private static EnumSet<Role> roleSet = EnumSet.allOf(Role.class);
+
     public boolean hasRole(String roleName) {
-        for (Role role : this.roleSet) {
+        for (Role role : roleSet) {
             if (role.getLabel().equals(roleName)) {
                 return true;
             }
