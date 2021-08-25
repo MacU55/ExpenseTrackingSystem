@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import study.example.service.CustomUserDetailsService;
 
 
@@ -21,6 +22,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -40,13 +44,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return authProvider;
     }
-/*
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
 
- */
+
 /*
 // original method
     @Override
@@ -71,20 +75,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
+                // URLs matching for access rights
+                .antMatchers("/").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/process_register").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-//                .loginPage("/login")
+                // form login
+                .csrf().disable().formLogin()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/login_perform")
+                .failureUrl("/login.html?error=true")
+//                .successHandler(loginSuccessHandler)
+                .defaultSuccessUrl("/success", true)
                 .usernameParameter("email")
-                .successHandler(loginSuccessHandler)
-                .permitAll()
+                .passwordParameter("password")
                 .and()
-                .logout().permitAll();
+                //logout
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/").and()
+                .exceptionHandling()
+                .accessDeniedPage("/access-denied");
+
     }
-
-
-    @Autowired
-    private LoginSuccessHandler loginSuccessHandler;
-
 
 }

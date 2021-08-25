@@ -7,7 +7,9 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -23,13 +25,18 @@ import org.supercsv.prefs.CsvPreference;
 import study.example.config.ResponseMessage;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
+import study.example.model.Role;
 import study.example.model.User;
 import study.example.repository.UserRepository;
+import study.example.service.CustomUserDetails;
 import study.example.service.ExpenseService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.xml.transform.Result;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -53,6 +60,9 @@ public class AppController {
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private CustomUserDetails customUserDetails;
+
     @ModelAttribute
     LocalDate initLocalDate() {
         return LocalDate.now();
@@ -63,6 +73,62 @@ public class AppController {
     public String viewStartPage() {
         return "start";
     }
+    // mapping for viewing page login.html
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView login(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
+    }
+    // mapping to submit user's data while login
+//    @RequestMapping(value = "/login", method = RequestMethod.POST)
+//
+//    @RequestMapping(value = "/login", method = RequestMethod.POST)
+//    public String login(@RequestParam(value = "email") String email,
+//                        @RequestParam(value = "password") String password, HttpSession session) {
+//        Result result = customUserDetails.login(email, password);
+//        session.setAttribute("user", result.getData());
+//
+//        if(result.getStatus() == 200){
+//            return  "redirect:/profile";
+//        } else {
+//            return "redirect:/login?error";
+//        }
+//    }
+
+    @RequestMapping("/success")
+    public void loginPageRedirect(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  Authentication authResult) throws IOException, ServletException {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+String userName1;
+String userLabel;
+        if (principal instanceof UserDetails) {
+            userName1 = ((UserDetails)principal).getUsername();
+            userLabel = ((CustomUserDetails)principal).getUserLabel();
+        } else {
+            userName1 = principal.toString();
+            userLabel = principal.toString();
+        }
+
+    String role = authResult.getAuthorities().toString();
+//    Role result = customUserDetails.getUserRole();
+
+    if (userLabel.equals("Employee")) {
+        response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/expense_list"));
+    } else if (userLabel.equals("Manager")) {
+        response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/users"));
+    }
+    LOGGER.info("from 'Controller', user's role:" + role);
+//    LOGGER.info("from 'Controller', role's label:" + customUserDetails.getUserLabel());
+    LOGGER.info("from 'Controller', authResult:" + authResult.getPrincipal());
+    LOGGER.info("from 'Controller', user's name:" + userName1);
+    LOGGER.info("from 'Controller', user's label:" + userLabel);
+}
+
+
+
 
     //show registration form
     @GetMapping("/register")
@@ -216,14 +282,16 @@ public class AppController {
     // handling to edit selected expense
     @RequestMapping("/edit/{id}")
     public ModelAndView showEditExpensePage(@PathVariable(name = "id") int id,
-                                            @AuthenticationPrincipal UserDetails currentUser) {
+                                            @AuthenticationPrincipal UserDetails currentUser) throws IOException {
 
         User loggedUser = (User) userRepo.findByEmail(currentUser.getUsername());
         Long loggedUserId = loggedUser.getId();
 
         ModelAndView mav = new ModelAndView("edit_expense");
+
         ModelAndView mavPermissions = new ModelAndView(REDIRECT_NO_PERMISSIONS_HTML);
         Expense expense = expenseService.get(id);
+
         Long userId = expense.getUserId();
         if (!Objects.equals(loggedUserId, userId)) {
             return mavPermissions;

@@ -1,13 +1,14 @@
 package study.example.model;
 
 import com.opencsv.bean.CsvBindByName;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.*;
 
-
+@Component
 @Entity
 @Table(name = "users", schema = "exptracksystem")
 public class User implements Serializable {
@@ -45,7 +46,7 @@ public class User implements Serializable {
 
     private static EnumSet<Role> roleSet = EnumSet.allOf(Role.class);
 
-    public boolean hasRole(String roleName) {
+    public boolean hasRoleFromUserEntity(String roleName) {
         for (Role role : roleSet) {
             if (role.getLabel().equals(roleName)) {
                 return true;
@@ -68,7 +69,7 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.password = password;
         this.role = role;
-        this.roleSet = roleSet;
+        User.roleSet = roleSet;
         this.expenseList = expenseList;
     }
 
@@ -136,6 +137,8 @@ public class User implements Serializable {
         this.roleSet = roleSet;
     }
 
+    public String getLabel (){ return this.role.getLabel();}
+
     @Override
     public String toString() {
         return "User{" +
@@ -145,7 +148,6 @@ public class User implements Serializable {
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", roleSet=" + roleSet +
                 ", expenseList=" + expenseList +
                 '}';
     }

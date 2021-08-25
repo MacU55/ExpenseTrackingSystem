@@ -1,7 +1,7 @@
 package study.example.model;
 
 public enum Role {
-    EMPLOYEE("Employee"), MANAGER("Manager");
+     MANAGER("Manager"), EMPLOYEE("Employee");
 
     public String label;
 
