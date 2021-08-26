@@ -39,7 +39,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-
+    // метод determineTargetUrl () тестировать на не нужность- удалить.
     protected String determineTargetUrl( Authentication authentication) throws IOException {
         String url ="/login.html?error=true";
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

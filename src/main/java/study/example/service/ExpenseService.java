@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import study.example.exceptions.MyFileNotFoundException;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
+import study.example.model.User;
 import study.example.repository.ExpenseRepository;
 
 
@@ -30,6 +32,12 @@ public class ExpenseService {
     public List<Expense> listAll(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType) {
         return repo.findExpensesByDateAndType(startExpenseDate, finishExpenseDate, expenseType);
     }
+
+    public List<Expense> listAll(LocalDate startExpenseDate, LocalDate finishExpenseDate, ExpenseType expenseType, Long employeeId) {
+        return repo.findExpensesByDateAndTypeAndEmployee(startExpenseDate, finishExpenseDate, expenseType, employeeId);
+    }
+
+
 
     public void save(Expense expense) {
         repo.save(expense);

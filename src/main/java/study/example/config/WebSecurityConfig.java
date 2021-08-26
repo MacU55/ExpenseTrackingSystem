@@ -51,26 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-/*
-// original method
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/users").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .usernameParameter("email")
-                .defaultSuccessUrl("/index")
-                .permitAll()
-                .and()
-                .logout().logoutSuccessUrl("/").permitAll();
-    }
-
- */
-
-    // new
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 

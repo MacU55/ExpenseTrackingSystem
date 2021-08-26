@@ -46,6 +46,7 @@ public class User implements Serializable {
 
     private static EnumSet<Role> roleSet = EnumSet.allOf(Role.class);
 
+    //метод hasRoleFromUserEntity и EnumSet<Role> тестировать на не нужность- удалить.
     public boolean hasRoleFromUserEntity(String roleName) {
         for (Role role : roleSet) {
             if (role.getLabel().equals(roleName)) {
@@ -151,4 +152,5 @@ public class User implements Serializable {
                 ", expenseList=" + expenseList +
                 '}';
     }
+
 }

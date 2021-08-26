@@ -73,61 +73,44 @@ public class AppController {
     public String viewStartPage() {
         return "start";
     }
+
     // mapping for viewing page login.html
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView login(){
+    public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         return modelAndView;
     }
-    // mapping to submit user's data while login
-//    @RequestMapping(value = "/login", method = RequestMethod.POST)
-//
-//    @RequestMapping(value = "/login", method = RequestMethod.POST)
-//    public String login(@RequestParam(value = "email") String email,
-//                        @RequestParam(value = "password") String password, HttpSession session) {
-//        Result result = customUserDetails.login(email, password);
-//        session.setAttribute("user", result.getData());
-//
-//        if(result.getStatus() == 200){
-//            return  "redirect:/profile";
-//        } else {
-//            return "redirect:/login?error";
-//        }
-//    }
 
+    //handling for redirecting to certain page user upon its role
     @RequestMapping("/success")
     public void loginPageRedirect(HttpServletRequest request,
                                   HttpServletResponse response,
-                                  Authentication authResult) throws IOException, ServletException {
+                                  Authentication authResult) throws IOException {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-String userName1;
-String userLabel;
+        String userEmail;
+        String userLabel;
         if (principal instanceof UserDetails) {
-            userName1 = ((UserDetails)principal).getUsername();
-            userLabel = ((CustomUserDetails)principal).getUserLabel();
+            userEmail = ((UserDetails) principal).getUsername();
+            userLabel = ((CustomUserDetails) principal).getUserLabel();
         } else {
-            userName1 = principal.toString();
+            userEmail = principal.toString();
             userLabel = principal.toString();
         }
 
-    String role = authResult.getAuthorities().toString();
-//    Role result = customUserDetails.getUserRole();
+        String role = authResult.getAuthorities().toString();
 
-    if (userLabel.equals("Employee")) {
-        response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/expense_list"));
-    } else if (userLabel.equals("Manager")) {
-        response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/users"));
+
+        if (userLabel.equals("Employee")) {
+            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/expense_list"));
+        } else if (userLabel.equals("Manager")) {
+            response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/users"));
+        }
+        LOGGER.info("logged user's role:" + role);
+        LOGGER.info("logged user's email:" + userEmail);
+        LOGGER.info("logged user's label:" + userLabel);
     }
-    LOGGER.info("from 'Controller', user's role:" + role);
-//    LOGGER.info("from 'Controller', role's label:" + customUserDetails.getUserLabel());
-    LOGGER.info("from 'Controller', authResult:" + authResult.getPrincipal());
-    LOGGER.info("from 'Controller', user's name:" + userName1);
-    LOGGER.info("from 'Controller', user's label:" + userLabel);
-}
-
-
 
 
     //show registration form
@@ -177,7 +160,7 @@ String userLabel;
         User user = (User) userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUserId", user.getId());
         model.addAttribute("user", user);
-        LOGGER.info("User's email is : " + user.getEmail() +", " + "and user's role is : " + user.getRole());
+        LOGGER.info("User's email is : " + user.getEmail() + ", " + "and user's role is : " + user.getRole());
         List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
         model.addAttribute("expenseList", expenseList);
         LOGGER.info("expense list was returned successfully");
@@ -259,7 +242,7 @@ String userLabel;
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile, Model model,
             @AuthenticationPrincipal UserDetails currentUser
 
-    ) throws SQLException, IOException {
+    ) throws IOException {
 
         if (bindingResult.hasErrors()) {
             LOGGER.error("incorrect data in  form");
@@ -275,7 +258,7 @@ String userLabel;
         expense.setUserId(userId);
         LOGGER.info("user id is assigned to expense successfully");
         expenseService.save(expense);
-        LOGGER.info("new expense is added successfully");
+        LOGGER.info("an expense is saved successfully");
         return "redirect:/expense_list";
     }
 
@@ -284,7 +267,7 @@ String userLabel;
     public ModelAndView showEditExpensePage(@PathVariable(name = "id") int id,
                                             @AuthenticationPrincipal UserDetails currentUser) throws IOException {
 
-        User loggedUser = (User) userRepo.findByEmail(currentUser.getUsername());
+        User loggedUser = userRepo.findByEmail(currentUser.getUsername());
         Long loggedUserId = loggedUser.getId();
 
         ModelAndView mav = new ModelAndView("edit_expense");
@@ -297,7 +280,7 @@ String userLabel;
             return mavPermissions;
         } else {
             mav.addObject("expense", expense);
-            LOGGER.info("selected expense was edited successfully");
+            LOGGER.info("selected expense was loaded successfully");
             return mav;
         }
 
@@ -309,7 +292,7 @@ String userLabel;
 
                                 @AuthenticationPrincipal UserDetails currentUser) {
 
-        User loggedUser = (User) userRepo.findByEmail(currentUser.getUsername());
+        User loggedUser = userRepo.findByEmail(currentUser.getUsername());
         Long loggedUserId = loggedUser.getId();
         Expense expense = expenseService.get(id);
         Long userId = expense.getUserId();
@@ -327,7 +310,7 @@ String userLabel;
     public ResponseEntity<Resource> downloadFile(@PathVariable(name = "id") int id,
                                                  @AuthenticationPrincipal UserDetails currentUser) {
 
-        User loggedUser = (User) userRepo.findByEmail(currentUser.getUsername());
+        User loggedUser = userRepo.findByEmail(currentUser.getUsername());
         Long loggedUserId = loggedUser.getId();
         Expense expense = expenseService.get(id);
         Long userId = expense.getUserId();
@@ -341,6 +324,36 @@ String userLabel;
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expenseGetFile.getId() + "\"" + ".jpg")
                     .body(new ByteArrayResource(expense.getPhotoProof()));
         }
+    }
+
+    // handling to show expense list for selected employee
+    @RequestMapping(value = "/selectedEmployeeExpenseList/{email}", method = {RequestMethod.POST, RequestMethod.GET})
+    public String employeeExpenseList(@PathVariable(name = "email") String email, Model model,
+                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
+                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
+                     @RequestParam(required = false) ExpenseType expenseType
+                     ){
+
+//        User loggedUser = userRepo.findByEmail(selectedEmployee.getUsername());
+//        LOGGER.info("userRepo.findByEmail(selectedEmployee.getUsername()" + loggedUser);
+        User employee = userRepo.findByEmail(email);
+        Long employeeId = employee.getId();
+        model.addAttribute("employee", employee);
+        model.addAttribute("id", employeeId);
+//        model.addAttribute("currentUserId", employee.getId());
+
+        LOGGER.info("User's email is : " + employee.getEmail() + ", " + "and employee's role is : " + employee.getRole());
+        List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType, employeeId );
+        model.addAttribute("expenseList", expenseList);
+        LOGGER.info("expense list was returned successfully");
+        model.addAttribute("startExpenseDate", startExpenseDate);
+        model.addAttribute("finishExpenseDate", finishExpenseDate);
+        model.addAttribute("expenseType", expenseType);
+//        model.addAttribute("", selectedEmployee );
+
+
+
+        return "employee_expense_list";
     }
 }
 

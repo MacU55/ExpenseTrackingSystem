@@ -13,24 +13,23 @@
     <br>
     <div>
         <form th:action="@{/logout}" method="post">
-            <p >
-                Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+            <p>
+                Welcome, manager <b>[[${#request.userPrincipal.principal.fullName}]]</b>
             </p>
             <input type="submit" value="Sign Out"/>
             <br>
         </form>
     </div>
     <br>
-    <h3><a th:href="@{/expense_list}" > Expense list </a></h3>
+    <!--h3><a th:href="@{/expense_list}"> Expense list </a></h3-->
     <br><br>
     <div>
-        <h1>Users</h1>
+        <h1>Employees</h1>
     </div>
     <hr align="center" width="1105" size="2" color="#ff0000"/>
     <br>
     <div>
         <table border="0" cellpadding="10" class="table table-striped" style="width:100%;align:center;">
-            <!--thead class="thead-dark"-->
             <thead>
             <tr>
                 <th>User ID</th>
@@ -41,13 +40,24 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user: ${listUsers}">
-                <td th:text="${user.id}">User ID</td>
+            <tr th:each="user: ${listUsers}" th:if="${user.getLabel() == 'Employee'}">
+<td>
+                <form method="post" th:action="@{'/selectedEmployeeExpenseList/' + ${user.email}}">
+                    <a  th:href="@{'/selectedEmployeeExpenseList/' + ${user.email}}"  th:text="${user.id}">User ID</a>
+                </form>
+</td>
                 <td th:text="${user.email}">E-mail</td>
+
+
                 <td th:text="${user.firstName}">First Name</td>
+
+
                 <td th:text="${user.lastName}">Last Name</td>
+
+
                 <td th:text="${user.role}">Role</td>
             </tr>
+
             </tbody>
         </table>
     </div>
