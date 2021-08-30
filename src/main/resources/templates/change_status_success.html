@@ -2,12 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Registration Success</title>
+    <title>Change status success</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <style>
+</head>
+<style>
     .btn {
     display: inline-block; /* Строчно-блочный элемент */
     background: #8C959D; /* Серый цвет фона */
@@ -17,13 +18,13 @@
     border-radius: 3px; /* Скругляем уголки */
    }
 </style>
-</head>
+
 <body>
+<br>
 <div class="container text-center">
+    <h3>You have changed expense status successfully!</h3>
     <br>
-    <h3>You have signed up successfully!</h3>
-    <br>
-    <h4><a th:href="@{/login}" class="btn">Click here to Login</a></h4>
+    <h4><a th:href="@{/users}" class="btn"> Back to list of employees </a></h4>
 </div>
 
 </body>

@@ -53,6 +53,7 @@ h1 {
   width: 175px;
   }
 
+
     </style>
 </head>
 <body>
@@ -61,21 +62,26 @@ h1 {
     <hr align="center" width="500" size="2" color="#ff0000"/>
     <br>
     <div style="margin:1px; float:right; width:180px">
-        <!--h3><a th:href="@{/users}" class="btn"> List of users </a></h3-->
+
         <h3><a th:href="@{/logout}" class="btn" style="color:black; background-color:#b19ec3"> Log out </a></h3>
     </div>
     <div style="margin:1px; float:right; width:180px">
-        <h3><a th:href="@{/users}" class="btn"> List of users </a></h3>
+        <h3><a th:href="@{/users}" class="btn"> List of employees </a></h3>
     </div>
 
     <div style="float:left; margin-left:50px; color:darkblue; font-size: 12pt;
     font-weight: 600; ">
-        Employee: <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+        Manager: <b>[[${#request.userPrincipal.principal.fullName}]]</b>
     </div>
     <br> <br>
     <hr>
     <div>
         <h3>Expense list</h3>
+    </div>
+    <div style="float:left; margin-left:50px; color:darkblue; font-size: 12pt;
+    font-weight: 600; ">
+        Employee:
+        <!--span th:text="${expenseList}"> </span-->insert here employee full name!
     </div>
     <div class="d-block my-3" style="padding: 2%; margin-left: 1px">
         <form th:action="@{/expense_list}" method="post">
@@ -115,6 +121,15 @@ h1 {
     </div>
 
     <table border="0" cellpadding="10" class="table table-striped" style="width:100%;align:center;">
+        <col style="width:10%">
+        <col style="width:10%">
+        <col style="width:12%">
+        <col style="width:10%">
+        <col style="width:12%">
+        <col style="width:12%">
+        <col style="width:7%">
+        <col style="width:27%">
+
         <thead>
         <tr>
             <th>Expense ID</th>
@@ -122,7 +137,7 @@ h1 {
             <th>Expense date</th>
             <th>Amount</th>
             <th>Expense type</th>
-            <th>User email</th>
+            <th>Employee email</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -135,22 +150,19 @@ h1 {
             <td th:text="${expense.amount}">Amount</td>
             <td th:text="${expense.expenseType.label}">Expense type</td>
             <td th:text="${expense.user?.email}">User email</td>
+            <td th:text="${expense.status}">Status</td>
             <td>
-                <select name="role" class="d-block my-3">
-                    <option th:each="type : ${T(study.example.model.Status).values()}"
-                            th:value="${type}" th:text="${type.label}"></option>
-                </select>
-
-            </td>
-
-
-            <!--td th:text="${expense.status.label}">Status</td-->
-
-            <td><!--a th:href="@{'/edit/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Edit</a-->
-                <!--a-- th:href="@{'/delete/' + ${expense.id}}" class="btn" style="margin-right:15px; float:left">Delete</a-->
-                <span th:unless="${expense.photoProof==null}"><a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}"
-                                                                 class="btn" style="float:left">Download photo</a>
+                <span th:unless="${expense.photoProof==null}">
+                    <a th:href="@{'/downLoadPhotoProof/' + ${expense.id}}" class="btn"
+                       style="float:left">Download photo</a>
                 </span>
+                <span>
+                <form method="post" th:action="@{'/showChangeStatusTemplate/' + ${expense.id}}">
+                    <a th:href="@{'/showChangeStatusTemplate/' + ${expense.id}}" class="btn"
+                       style="float:right">Change status</a>
+                </form>
+                    </span>
+
             </td>
         </tr>
         </tbody>
@@ -160,6 +172,7 @@ h1 {
 	function clearSearch() {
 		window.location = "[[@{/expense_list}]]";
 	}
+
 
 </script>
 </body>

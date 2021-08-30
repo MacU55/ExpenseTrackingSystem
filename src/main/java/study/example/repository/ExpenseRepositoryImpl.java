@@ -51,7 +51,6 @@ public class ExpenseRepositoryImpl implements ExpenseRepositoryCustom {
             predicates.add(type);
         }
 
-
         cq.where(predicates.toArray(new Predicate[0]));
         return em.createQuery(cq).getResultList();
     }
@@ -67,7 +66,6 @@ public class ExpenseRepositoryImpl implements ExpenseRepositoryCustom {
 
         Root<Expense> expense = cq.from(Expense.class);
         List<Predicate> predicates = new ArrayList<>();
-
 
         if (startExpenseDate != null) {
             Predicate date = cb.greaterThanOrEqualTo(expense.get("expenseDate"), startExpenseDate);

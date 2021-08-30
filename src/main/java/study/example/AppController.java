@@ -23,10 +23,7 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 import study.example.config.ResponseMessage;
-import study.example.model.Expense;
-import study.example.model.ExpenseType;
-import study.example.model.Role;
-import study.example.model.User;
+import study.example.model.*;
 import study.example.repository.UserRepository;
 import study.example.service.CustomUserDetails;
 import study.example.service.ExpenseService;
@@ -99,15 +96,14 @@ public class AppController {
             userLabel = principal.toString();
         }
 
-        String role = authResult.getAuthorities().toString();
-
+//        String role = authResult.getAuthorities().toString();
 
         if (userLabel.equals("Employee")) {
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/expense_list"));
         } else if (userLabel.equals("Manager")) {
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/users"));
         }
-        LOGGER.info("logged user's role:" + role);
+//        LOGGER.info("logged user's role:" + role);
         LOGGER.info("logged user's email:" + userEmail);
         LOGGER.info("logged user's label:" + userLabel);
     }
@@ -314,8 +310,16 @@ public class AppController {
         Long loggedUserId = loggedUser.getId();
         Expense expense = expenseService.get(id);
         Long userId = expense.getUserId();
+//
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userLabel;
+        if (principal instanceof UserDetails) {
+            userLabel = ((CustomUserDetails) principal).getUserLabel();
+        } else {
+            userLabel = principal.toString();
+        }
 
-        if (!Objects.equals(loggedUserId, userId)) {
+        if ((!Objects.equals(loggedUserId, userId)) & (userLabel.equals("Employee"))) {
             return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, NO_PERMISSIONS_HTML).build();
         } else {
             Expense expenseGetFile = expenseService.getInstance(id);
@@ -326,34 +330,58 @@ public class AppController {
         }
     }
 
+    // handling to change expense status
+    @RequestMapping(value = "/showChangeStatusTemplate/{id}", method = {RequestMethod.POST, RequestMethod.GET})
+    public String showChangeStatus(@PathVariable(name = "id") int id, Model model
+//                                       @ModelAttribute Expense expense
+    ) {
+        Expense expenseToChangeStatus = expenseService.get(id);
+        model.addAttribute(expenseToChangeStatus);
+//        model.addAttribute(status);
+//        model.addAttribute(expense);
+        return "changeStatus";
+    }
+
+    // assign new status for selected expense
+    @RequestMapping(value = "/assignNewStatus/{id}", method = RequestMethod.POST)
+    public String assignNewStatus(@PathVariable(name = "id") Long id,
+                                  @Valid @ModelAttribute(name = "expense") Expense expense,
+                                  @RequestParam(name = "statusNew") Status status, Model model,
+                                  BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            LOGGER.error("incorrect data in form");
+            return "changeStatus";
+        }
+
+        Expense changedExpense=expenseService.get(id);
+        changedExpense.setStatus(status);
+        expenseService.save(changedExpense);
+        model.addAttribute("newExpense", changedExpense);
+        LOGGER.info("new status:" + status);
+        return "change_status_success";
+    }
+
     // handling to show expense list for selected employee
     @RequestMapping(value = "/selectedEmployeeExpenseList/{email}", method = {RequestMethod.POST, RequestMethod.GET})
     public String employeeExpenseList(@PathVariable(name = "email") String email, Model model,
-                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
-                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
-                     @RequestParam(required = false) ExpenseType expenseType
-                     ){
+                                      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startExpenseDate,
+                                      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishExpenseDate,
+                                      @RequestParam(required = false) ExpenseType expenseType
+    ) {
 
-//        User loggedUser = userRepo.findByEmail(selectedEmployee.getUsername());
-//        LOGGER.info("userRepo.findByEmail(selectedEmployee.getUsername()" + loggedUser);
         User employee = userRepo.findByEmail(email);
         Long employeeId = employee.getId();
         model.addAttribute("employee", employee);
         model.addAttribute("id", employeeId);
-//        model.addAttribute("currentUserId", employee.getId());
-
         LOGGER.info("User's email is : " + employee.getEmail() + ", " + "and employee's role is : " + employee.getRole());
-        List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType, employeeId );
+        List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType, employeeId);
         model.addAttribute("expenseList", expenseList);
         LOGGER.info("expense list was returned successfully");
         model.addAttribute("startExpenseDate", startExpenseDate);
         model.addAttribute("finishExpenseDate", finishExpenseDate);
         model.addAttribute("expenseType", expenseType);
-//        model.addAttribute("", selectedEmployee );
-
-
-
-        return "employee_expense_list";
+        return "employees_expense_list";
     }
 }
 

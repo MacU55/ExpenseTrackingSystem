@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import study.example.exceptions.MyFileNotFoundException;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
+import study.example.model.Status;
 import study.example.model.User;
 import study.example.repository.ExpenseRepository;
 
@@ -50,6 +51,11 @@ public class ExpenseService {
     public void delete(long id) {
         repo.deleteById(id);
     }
+
+    public void setStatus(Status status, Long id)
+    { repo.findById(id);
+    }
+//    public void setStatus(Status status){ repo.save(Expense short)}
 
     // method to insert data from csv file to database
     public void saveFromSCVToDatabase(MultipartFile file) {

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="utf-8"/>
+    <title>Changing expense status</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <script>
+    <script type="text/javascript">
+   $(function () {
+       $('#datetimepicker6').datetimepicker();
+       $('#datetimepicker7').datetimepicker({
+   useCurrent: false //Important! See issue #1075
+   });
+       $("#datetimepicker6").on("dp.change", function (e) {
+           $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+       });
+       $("#datetimepicker7").on("dp.change", function (e) {
+           $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+       });
+   });
+
+
+
+
+
+    </script>
+    <style>
+    span {
+    color: red;
+    font-style: italic;
+    }
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff !important; /* Белый цвет текста */
+    padding: 0.6rem 1.01rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+   .labelField{
+   font-size: 12pt;
+    font-weight: 700;
+   }
+
+
+
+    </style>
+</head>
+
+<body class="bg-light">
+<div align="center" class="container">
+
+    <h1>Changing expense status</h1>
+
+    <hr align="center" width="600" size="2" color="#ff0000"/>
+
+    <div style="float:left; margin-left:275px; color:darkblue; font-size: 12pt;
+    font-weight: 600; ">
+        Employee: <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+    </div>
+
+    <form action="#" th:action="@{'/assignNewStatus/' + ${expense.id}}" th:object="${expense}" style="width:50%"
+          method="post">
+
+        <div class="d-block my-3" style="width:400px;height:40px; float: left">
+            <div style="float:left;  color:darkblue; font-size: 15pt; font-weight: 600;">Expense Id:</div>
+            <input type="text" class="form-control" th:field="*{id}" readonly/>
+        </div>
+
+        <div class="d-block my-3" style="width:400px; height:40px; float: left">
+            <div style="float:left;  color:darkblue; font-size: 15pt; font-weight: 600;">Expense description:</div>
+            <input type="text" class="form-control" th:field="*{description}" readonly/>
+        </div>
+
+        <div class="d-block my-3" style="width:400px; height:40px; float: left">
+            <div style="float:left;  color:darkblue; font-size: 15pt; font-weight: 600;">Expense date</div>
+            <input type="date" class="form-control" th:field="*{expenseDate}" readonly/>
+        </div>
+
+        <div class="d-block my-3" style="width:400px; height:40px; float: left">
+            <div style="float:left;  color:darkblue; font-size: 15pt; font-weight: 600;">Expense amount</div>
+            <input type="text" size="18" class="form-control" th:field="*{amount}" readonly/>
+        </div>
+
+        <div class="d-block my-3" style="width:400px; height:40px; float: left">
+            <div style="float:left;  color:darkblue; font-size: 15pt; font-weight: 600;">Expense type</div>
+            <input type="text" size="18" class="form-control" th:field="*{expenseType}" readonly/>
+        </div>
+
+
+        <div class="d-block my-3" style="width:400px; height:40px; float: left">
+            <div style="float:left;  color:darkblue; font-size: 15pt; font-weight: 600;">Expense status</div>
+            <input type="text" size="18" class="form-control" th:field="*{status}" readonly/>
+        </div>
+
+        <div align="left" class="d-block my-3" style=" float: left">
+            <div style="float:left;  color:blue; font-size: 15pt; font-weight: 600;">Select new expense status:</div>
+            <div align="left" class="d-block my-3" style="width:300px; float: left">
+
+                <select name="statusNew" align="left" class="d-block my-3" style=" float: left">
+                    <option th:each="type : ${T(study.example.model.Status).values()}"
+                            th:value="${type}" th:text="${type.label}"></option>
+                </select>
+                <!--legend>Select status</legend-->
+                <!--ul>
+         <li th:each="type : ${T (study.example.model.Status).values()}">
+             <input type="radio" th:field="${se.status}" th:value="${type}" />
+             <label th:for="${expense.status}" th:text="${newStatus}"></label>
+         </li>
+     </ul-->
+            </div>
+        </div>
+        <div align="left" class="d-block my-3" style=" float: left">
+            <button type="submit" class="btn">Submit</button>
+        </div>
+
+        <div class="d-block my-3" style=" float: left; margin-left:90px">
+            <a th:href="@{/users}" class="btn"> Back to list of employees </a>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
