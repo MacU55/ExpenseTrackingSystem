@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // form login
                 .csrf().disable().formLogin()
-                .loginPage("/login.html")
+                .loginPage("/login")
                 .loginProcessingUrl("/login_perform")
                 .failureUrl("/login.html?error=true")
 //                .successHandler(loginSuccessHandler)

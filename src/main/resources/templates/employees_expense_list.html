@@ -54,6 +54,8 @@ h1 {
   }
 
 
+
+
     </style>
 </head>
 <body>
@@ -70,7 +72,7 @@ h1 {
     </div>
 
     <div style="float:left; margin-left:50px; color:darkblue; font-size: 12pt;
-    font-weight: 600; ">
+    font-weight: 600; " >
         Manager: <b>[[${#request.userPrincipal.principal.fullName}]]</b>
     </div>
     <br> <br>
@@ -80,7 +82,6 @@ h1 {
     </div>
     <div style="float:left; margin-left:50px; color:darkblue; font-size: 12pt;
     font-weight: 600; ">
-        Employee:
         <!--span th:text="${expenseList}"> </span-->insert here employee full name!
     </div>
     <div class="d-block my-3" style="padding: 2%; margin-left: 1px">
@@ -158,8 +159,11 @@ h1 {
                 </span>
                 <span>
                 <form method="post" th:action="@{'/showChangeStatusTemplate/' + ${expense.id}}">
-                    <a th:href="@{'/showChangeStatusTemplate/' + ${expense.id}}" class="btn"
-                       style="float:right">Change status</a>
+                   <span th:if="${expense.status == T(study.example.model.Status).PENDING}">
+
+                       <a th:href="@{'/showChangeStatusTemplate/' + ${expense.id}}" class="btn"
+                           style="float:right">Change status</a>
+                   </span>
                 </form>
                     </span>
 
@@ -172,6 +176,8 @@ h1 {
 	function clearSearch() {
 		window.location = "[[@{/expense_list}]]";
 	}
+
+
 
 
 </script>

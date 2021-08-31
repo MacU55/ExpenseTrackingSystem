@@ -56,6 +56,7 @@ public class ExpenseRepositoryImpl implements ExpenseRepositoryCustom {
     }
 
     public List<Expense> findExpensesByDateAndTypeAndEmployee(
+
             LocalDate startExpenseDate,
             LocalDate finishExpenseDate,
             ExpenseType expenseType,

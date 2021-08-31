@@ -330,8 +330,7 @@ public class AppController {
     ) {
         Expense expenseToChangeStatus = expenseService.get(id);
         model.addAttribute(expenseToChangeStatus);
-//        model.addAttribute(status);
-//        model.addAttribute(expense);
+
         return "changeStatus";
     }
 

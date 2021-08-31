@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.supercsv.cellprocessor.ParseEnum;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
+import study.example.model.Status;
 
 import javax.persistence.EnumType;
 
@@ -42,6 +43,8 @@ public class CSVHelper {
                 expense.setExpenseDate(LocalDate.parse(csvRecord.get("expenseDate")));
                 expense.setAmount(new BigDecimal(csvRecord.get("amount")));
                 expense.setExpenseType(ExpenseType.valueOf(csvRecord.get("expenseType")));
+//               expense.setUserId(new Long(csvRecord.get("userId")));
+        //        expense.setStatus(Status.valueOf(csvRecord.get("status")));
 
                 expenseList.add(expense);
             }
