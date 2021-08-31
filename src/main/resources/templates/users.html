@@ -27,7 +27,11 @@
         <h1>Employees</h1>
     </div>
     <hr align="center" width="1105" size="2" color="#ff0000"/>
-    <br>
+
+    <div>
+        <p style="float:left; color: grey"> Select user's id to get his expense list, to change expense status.</p>
+    </div>
+
     <div>
         <table border="0" cellpadding="10" class="table table-striped" style="width:100%;align:center;">
             <thead>
@@ -41,11 +45,11 @@
             </thead>
             <tbody>
             <tr th:each="user: ${listUsers}" th:if="${user.getLabel() == 'Employee'}">
-<td>
-                <form method="post" th:action="@{'/selectedEmployeeExpenseList/' + ${user.email}}">
-                    <a  th:href="@{'/selectedEmployeeExpenseList/' + ${user.email}}"  th:text="${user.id}">User ID</a>
-                </form>
-</td>
+                <td>
+                    <form method="post" th:action="@{'/selectedEmployeeExpenseList/' + ${user.email}}">
+                        <a th:href="@{'/selectedEmployeeExpenseList/' + ${user.email}}" th:text="${user.id}">User ID</a>
+                    </form>
+                </td>
                 <td th:text="${user.email}">E-mail</td>
 
 

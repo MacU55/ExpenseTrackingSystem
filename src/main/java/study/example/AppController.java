@@ -188,8 +188,8 @@ public class AppController {
         List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType);
 
         ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Expense Id", "Description", "Expense date", "Amount", "Expense type", "User Id"};
-        String[] nameMapping = {"id", "description", "expenseDate", "amount", "expenseType", "userId"};
+        String[] csvHeader = {"Expense Id", "Description", "Expense date", "Amount", "Expense type", "User Id", "Status"};
+        String[] nameMapping = {"id", "description", "expenseDate", "amount", "expenseType", "userId", "status"};
 
         csvWriter.writeHeader(csvHeader);
 
@@ -201,25 +201,18 @@ public class AppController {
 
     // handling to upload csv file to database
     @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("CSVFile") MultipartFile file) {
-        String message = "";
-
+    public String uploadFile(@RequestParam("CSVFile") MultipartFile file) {
         try {
             expenseService.saveFromSCVToDatabase(file);
+//            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//                    .path("/api/csv/download/")
+//                    .path(file.getOriginalFilename())
+//                    .toUriString();
 
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-
-            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/csv/download/")
-                    .path(file.getOriginalFilename())
-                    .toUriString();
-
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message, fileDownloadUri));
+            return "success_actions/upload_csv_file_success";
         } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message, ""));
+            return "fail_actions/upload_csv_file_fail";
         }
-
     }
 
     // handling to forward on form for creating new expense
