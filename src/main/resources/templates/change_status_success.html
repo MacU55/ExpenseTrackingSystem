@@ -24,7 +24,12 @@
 <div class="container text-center">
     <h3>You have changed expense status successfully!</h3>
     <br>
-    <h4><a th:href="@{/users}" class="btn"> Back to list of employees </a></h4>
+    <div>
+        <form method="post" th:action="@{'/selectedEmployeeExpenseList/' + ${employeeEmail}}">
+            <a th:href="@{'/selectedEmployeeExpenseList/' + ${employeeEmail}}"  class="btn">Back to expenses list</a>
+        </form>
+    </div>
+    <!--h4><a th:href="@{/users}" class="btn"> Back to list of employees </a></h4-->
 </div>
 
 </body>

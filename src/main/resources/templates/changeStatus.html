@@ -59,7 +59,7 @@
 
     <div style="float:left; margin-left:275px; color:darkblue; font-size: 12pt;
     font-weight: 600; ">
-        Employee: <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+        Employee: <b>[[${employeeFirstName}]] [[${employeeLastName}]]  </b>
     </div>
 
     <form action="#" th:action="@{'/assignNewStatus/' + ${expense.id}}" th:object="${expense}" style="width:50%"
@@ -117,10 +117,15 @@
             <button type="submit" class="btn">Submit</button>
         </div>
 
-        <div class="d-block my-3" style=" float: left; margin-left:90px">
-            <a th:href="@{/users}" class="btn"> Back to list of employees </a>
+
+        <div>
+            <form method="post" th:action="@{'/selectedEmployeeExpenseList/' + ${employeeEmail}}">
+                <a th:href="@{'/selectedEmployeeExpenseList/' + ${employeeEmail}}"  class="btn">Back to expenses list</a>
+            </form>
         </div>
+
     </form>
+
 
 </div>
 </body>

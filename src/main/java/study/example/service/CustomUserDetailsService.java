@@ -21,5 +21,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(user);
     }
 
+//    @Override
+    /*
+    public UserDetails loadUserByUserId(int id) throws UsernameNotFoundException {
+        User user = userRepo.findById(id);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new CustomUserDetails(user);
+    }
+
+     */
+
 }
 

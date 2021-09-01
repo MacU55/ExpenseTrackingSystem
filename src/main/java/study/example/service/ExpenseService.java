@@ -55,7 +55,9 @@ public class ExpenseService {
     public void setStatus(Status status, Long id)
     { repo.findById(id);
     }
-//    public void setStatus(Status status){ repo.save(Expense short)}
+
+//    public User
+
 
     // method to insert data from csv file to database
     public void saveFromSCVToDatabase(MultipartFile file) {

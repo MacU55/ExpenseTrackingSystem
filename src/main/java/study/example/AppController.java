@@ -18,30 +18,25 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
-import study.example.config.ResponseMessage;
 import study.example.model.*;
 import study.example.repository.UserRepository;
 import study.example.service.CustomUserDetails;
 import study.example.service.ExpenseService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import javax.xml.transform.Result;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Controller
@@ -96,14 +91,12 @@ public class AppController {
             userLabel = principal.toString();
         }
 
-//        String role = authResult.getAuthorities().toString();
-
         if (userLabel.equals("Employee")) {
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/expense_list"));
         } else if (userLabel.equals("Manager")) {
             response.sendRedirect(response.encodeRedirectURL(request.getContextPath() + "/users"));
         }
-//        LOGGER.info("logged user's role:" + role);
+
         LOGGER.info("logged user's email:" + userEmail);
         LOGGER.info("logged user's label:" + userLabel);
     }
@@ -153,7 +146,7 @@ public class AppController {
         if (export != null) {
             return "forward:/export";
         }
-        User user = (User) userRepo.findByEmail(currentUser.getUsername());
+        User user = userRepo.findByEmail(currentUser.getUsername());
         model.addAttribute("currentUserId", user.getId());
         model.addAttribute("user", user);
         LOGGER.info("User's email is : " + user.getEmail() + ", " + "and user's role is : " + user.getRole());
@@ -330,6 +323,13 @@ public class AppController {
     ) {
         Expense expenseToChangeStatus = expenseService.get(id);
         model.addAttribute(expenseToChangeStatus);
+        User employee = expenseToChangeStatus.getUser();
+        String employeeFirstName = employee.getFirstName();
+        String employeeLastName = employee.getLastName();
+        String employeeEmail = employee.getEmail();
+        model.addAttribute("employeeFirstName", employeeFirstName);
+        model.addAttribute("employeeLastName", employeeLastName);
+        model.addAttribute("employeeEmail", employeeEmail);
 
         return "changeStatus";
     }
@@ -350,6 +350,9 @@ public class AppController {
         changedExpense.setStatus(status);
         expenseService.save(changedExpense);
         model.addAttribute("newExpense", changedExpense);
+        User employee = changedExpense.getUser();
+        String employeeEmail = employee.getEmail();
+        model.addAttribute("employeeEmail", employeeEmail);
         LOGGER.info("new status:" + status);
         return "change_status_success";
     }
@@ -379,5 +382,12 @@ public class AppController {
         model.addAttribute("expenseType", expenseType);
         return "employees_expense_list";
     }
+
+    // handling to back to expense list for selected employee
+//    @RequestMapping(value = "/selectedEmployeeExpenseList/{email}", method = {RequestMethod.POST, RequestMethod.GET})
+//    public String backToEmployeeExpenseList(@PathVariable(name = "email") String email){
+//        re
+//    }
+
 }
 
