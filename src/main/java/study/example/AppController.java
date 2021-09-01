@@ -364,8 +364,12 @@ public class AppController {
 
         User employee = userRepo.findByEmail(email);
         Long employeeId = employee.getId();
+        String employeeFirstName = employee.getFirstName();
+        String employeeLastName = employee.getLastName();
         model.addAttribute("employee", employee);
         model.addAttribute("id", employeeId);
+        model.addAttribute("employeeFirstName", employeeFirstName);
+        model.addAttribute("employeeLastName", employeeLastName);
         LOGGER.info("User's email is : " + employee.getEmail() + ", " + "and employee's role is : " + employee.getRole());
         List<Expense> expenseList = expenseService.listAll(startExpenseDate, finishExpenseDate, expenseType, employeeId);
         model.addAttribute("expenseList", expenseList);
