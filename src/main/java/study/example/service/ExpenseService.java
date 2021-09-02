@@ -38,8 +38,6 @@ public class ExpenseService {
         return repo.findExpensesByDateAndTypeAndEmployee(startExpenseDate, finishExpenseDate, expenseType, employeeId);
     }
 
-
-
     public void save(Expense expense) {
         repo.save(expense);
     }
