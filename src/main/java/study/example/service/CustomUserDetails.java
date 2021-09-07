@@ -88,7 +88,6 @@ public class CustomUserDetails implements UserDetails {
 
     public String getUserEmail(){ return user.getEmail(); }
 
-
     public String getUserLabel(){return user.getLabel();}
 
 

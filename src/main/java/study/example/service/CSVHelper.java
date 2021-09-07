@@ -1,30 +1,19 @@
 package study.example.service;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import study.example.model.Expense;
+import study.example.model.ExpenseType;
+
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.csv.QuoteMode;
-import org.springframework.web.multipart.MultipartFile;
-import org.supercsv.cellprocessor.ParseEnum;
-import study.example.model.Expense;
-import study.example.model.ExpenseType;
-import study.example.model.Status;
-
-import javax.persistence.EnumType;
 
 public class CSVHelper {
 
@@ -34,7 +23,6 @@ public class CSVHelper {
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
             List<Expense> expenseList = new ArrayList<>();
-
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
@@ -43,9 +31,6 @@ public class CSVHelper {
                 expense.setExpenseDate(LocalDate.parse(csvRecord.get("expenseDate")));
                 expense.setAmount(new BigDecimal(csvRecord.get("amount")));
                 expense.setExpenseType(ExpenseType.valueOf(csvRecord.get("expenseType")));
-//               expense.setUserId(new Long(csvRecord.get("userId")));
-        //        expense.setStatus(Status.valueOf(csvRecord.get("status")));
-
                 expenseList.add(expense);
             }
 

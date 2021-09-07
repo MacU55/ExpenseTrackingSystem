@@ -20,6 +20,8 @@
         <spring-boot-maven-pluginVersion>2.5.2</spring-boot-maven-pluginVersion>
         <thymeleafVersion>3.0.11.RELEASE</thymeleafVersion>
         <thymeleaf-spring5Version>3.0.11.RELEASE</thymeleaf-spring5Version>
+        <junit.jupiter.version>5.5.2</junit.jupiter.version>
+        <junit.platform.version>1.5.2</junit.platform.version>
     </properties>
 
     <dependencies>
@@ -106,6 +108,12 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+
+        </dependency>
 
         <!-- logging slf4j-->
         <dependency>
@@ -172,13 +180,15 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
-        <!-- test automation -->
+
+        <!-- test automation with JUnit 5, Mockito, Selenium -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.2</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>

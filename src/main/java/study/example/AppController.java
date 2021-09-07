@@ -296,7 +296,7 @@ public class AppController {
         Long loggedUserId = loggedUser.getId();
         Expense expense = expenseService.get(id);
         Long userId = expense.getUserId();
-//
+
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userLabel;
         if (principal instanceof UserDetails) {
@@ -309,10 +309,7 @@ public class AppController {
             return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, NO_PERMISSIONS_HTML).build();
         } else {
             Expense expenseGetFile = expenseService.getInstance(id);
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType("image/jpg"))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expenseGetFile.getId() + "\"" + ".jpg")
-                    .body(new ByteArrayResource(expense.getPhotoProof()));
+            return expenseService.DownloadPhoto(expenseGetFile);
         }
     }
 
@@ -346,7 +343,7 @@ public class AppController {
             return "changeStatus";
         }
 
-        Expense changedExpense=expenseService.get(id);
+        Expense changedExpense = expenseService.get(id);
         changedExpense.setStatus(status);
         expenseService.save(changedExpense);
         model.addAttribute("newExpense", changedExpense);

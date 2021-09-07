@@ -6,18 +6,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import study.example.exceptions.MyFileNotFoundException;
 import study.example.model.Expense;
 import study.example.model.ExpenseType;
 import study.example.model.Status;
-import study.example.model.User;
 import study.example.repository.ExpenseRepository;
-
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -50,13 +46,6 @@ public class ExpenseService {
         repo.deleteById(id);
     }
 
-    public void setStatus(Status status, Long id)
-    { repo.findById(id);
-    }
-
-//    public User
-
-
     // method to insert data from csv file to database
     public void saveFromSCVToDatabase(MultipartFile file) {
         try {
@@ -74,12 +63,14 @@ public class ExpenseService {
     }
 
     // to download image file (photoProof)
-    public ResponseEntity<Resource> firstdownloadPhotoProof(Expense expense){
+    public ResponseEntity<Resource> DownloadPhoto(Expense expense) {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("image/jpg"))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + expense.getId() + "\"" + ".jpg")
                 .body(new ByteArrayResource(expense.getPhotoProof()));
     }
+
+
 }
 
