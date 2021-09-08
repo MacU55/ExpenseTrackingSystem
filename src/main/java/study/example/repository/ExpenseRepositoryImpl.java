@@ -30,11 +30,10 @@ public class ExpenseRepositoryImpl implements ExpenseRepositoryCustom {
             ExpenseType expenseType) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Expense> cq = cb.createQuery(Expense.class);
+        CriteriaQuery <Expense> cq = cb.createQuery(Expense.class);
 
-        Root<Expense> expense = cq.from(Expense.class);
-        List<Predicate> predicates = new ArrayList<>();
-
+        Root <Expense> expense = cq.from(Expense.class);
+        List <Predicate> predicates = new ArrayList<>();
 
         if (startExpenseDate != null) {
             Predicate date = cb.greaterThanOrEqualTo(expense.get("expenseDate"), startExpenseDate);

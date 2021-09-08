@@ -1,23 +1,21 @@
 package study.example.service;
 
-import org.assertj.core.api.Assertions;
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 import study.example.model.Expense;
 import study.example.repository.ExpenseRepository;
 
+import java.io.*;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,34 +25,28 @@ public class ExpenseServiceTest {
     @Mock
     private ExpenseRepository expenseRepository;
 
-
     @InjectMocks
     private ExpenseService expenseService;
 
-    @Test
-    public void saveExpenseByRepo() {
+    @Captor
+    ArgumentCaptor <Expense> expenseCaptor;
 
-        Expense expense = new Expense();
-        expense.setDescription("new test Expense description");
-        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
-        Expense newExpense = expenseRepository.save(expense);
-        assertThat(newExpense.getDescription()).isNotNull();
-        Assert.assertEquals(expense, newExpense);
-        System.out.println("Test of method saveExpenseByRepo() is successful");
-    }
+    @Captor
+    ArgumentCaptor <List<Expense>> listExpensesCaptor;
 
     @Test
-    public void saveExpenseByService() {
+    public void testSave() {
 
         Expense expense = new Expense();
-        expense.setDescription("test of method save() of ExpenseService");
         expenseService.save(expense);
-        Assert.assertEquals("test of method save() of ExpenseService", expense.getDescription());
-        System.out.println("Test of method saveExpenseByService() of ExpenseService is successful");
+        Mockito.verify(expenseRepository).save(expenseCaptor.capture());
+        Expense value = expenseCaptor.getValue();
+        assertEquals(expense, value);
+        System.out.println("Test of method testSave() is successful");
     }
 
     @Test
-    public void getExpenseByService() {
+    public void testGet() {
 
         Expense expense = new Expense();
         expense.setDescription("test of method get() of ExpenseService");
@@ -66,11 +58,11 @@ public class ExpenseServiceTest {
         Assert.assertNotNull(expense.getId());
         Assert.assertNotNull(expense.getDescription());
         Assert.assertEquals("test of method get() of ExpenseService", expense.getDescription());
-        System.out.println("Test of method getExpenseByService() is successful");
+        System.out.println("Test of method testGet() is successful");
     }
 
     @Test
-    public void deleteExpenseByService() {
+    public void testDelete() {
 
         Expense expense = new Expense();
         expense.setDescription("test of method delete() of ExpenseService");
@@ -79,8 +71,23 @@ public class ExpenseServiceTest {
         expenseService.save(expense);
         expenseService.delete(expense.getId());
         verify(expenseRepository).deleteById(expense.getId());
-        System.out.println("Test of method deleteExpenseByService() is successful");
+        System.out.println("Test of method testDelete() is successful");
+    }
+/*
+    @Test
+    public void testFindExpensesByDateAndType() {
     }
 
+ */
+    @Test
+    public void saveFromSCVToDatabase() {
 
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("test_csv_insert.csv");
+        List<Expense> expenseList = CSVHelper.csvToExpenses(inputStream);
+        expenseRepository.saveAll(expenseList);
+        Mockito.verify(expenseRepository).saveAll(listExpensesCaptor.capture());
+        List <Expense> value = listExpensesCaptor.getValue();
+        assertEquals(expenseList, value);
+        System.out.println("Test of method saveFromSCVToDatabase() is successful");
+    }
 }
