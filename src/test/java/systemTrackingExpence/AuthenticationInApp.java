@@ -8,7 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class AuthenticationInApp {
 
-//    @BeforeClass
+//    test to login to web app with Selenium webdriver
 
     @Test
     public void testLogin() {

@@ -63,7 +63,7 @@
         <div align="left" class="form-label">
             <label class="labelField">Expense description</label>
             <br>
-            <input type="text" class="form-control" th:field="*{description}"/>
+            <input type="text" class="form-control" name="description" th:field="*{description}"/>
             <small id="passwordHelpBlock" class="form-text text-muted" align="left">
                 Your description may be 100 characters long maximum.
             </small>
@@ -74,7 +74,7 @@
 
         <div align="left" class="d-block my-3">
             <div class="labelField">Expense date</div>
-            <input type="date" th:field="*{expenseDate}"/>
+            <input type="date" name="expenseDate" th:field="*{expenseDate}"/>
             <div>
                 <span th:if="${#fields.hasErrors('expenseDate')}" th:errors="*{expenseDate}">expenseDate err</span>
             </div>
@@ -82,7 +82,7 @@
 
         <div align="left" class="d-block my-3">
             <div class="labelField">Expense amount</div>
-            <input type="text" size="18" th:field="*{amount}"/>
+            <input type="text" size="18" name="amount" th:field="*{amount}"/>
             <div>
                 <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">amount err</span>
             </div>
@@ -105,7 +105,7 @@
         </div>
 
         <div align="left" class="d-block my-3">
-            <button type="submit" class="btn">Save</button>
+            <button type="submit" name="save" class="btn">Save</button>
         </div>
 
         <div align="left" class="d-block my-3">

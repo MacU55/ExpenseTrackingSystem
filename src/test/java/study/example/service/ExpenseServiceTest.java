@@ -29,9 +29,6 @@ public class ExpenseServiceTest {
     private ExpenseService expenseService;
 
     @Captor
-    ArgumentCaptor <Expense> expenseCaptor;
-
-    @Captor
     ArgumentCaptor <List<Expense>> listExpensesCaptor;
 
     @Test
@@ -39,9 +36,9 @@ public class ExpenseServiceTest {
 
         Expense expense = new Expense();
         expenseService.save(expense);
-        Mockito.verify(expenseRepository).save(expenseCaptor.capture());
-        Expense value = expenseCaptor.getValue();
-        assertEquals(expense, value);
+        ArgumentCaptor<Expense> argument = ArgumentCaptor.forClass(Expense.class);
+        verify(expenseRepository).save(argument.capture());
+        assertEquals(expense, argument.getValue());
         System.out.println("Test of method testSave() is successful");
     }
 
@@ -86,8 +83,8 @@ public class ExpenseServiceTest {
         List<Expense> expenseList = CSVHelper.csvToExpenses(inputStream);
         expenseRepository.saveAll(expenseList);
         Mockito.verify(expenseRepository).saveAll(listExpensesCaptor.capture());
-        List <Expense> value = listExpensesCaptor.getValue();
-        assertEquals(expenseList, value);
+        List <Expense> expenseListFromCaptor = listExpensesCaptor.getValue();
+        assertEquals(expenseList, expenseListFromCaptor);
         System.out.println("Test of method saveFromSCVToDatabase() is successful");
     }
 }
