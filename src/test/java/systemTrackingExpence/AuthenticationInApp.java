@@ -1,17 +1,17 @@
 package systemTrackingExpence;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class AuthenticationInApp {
+public class
+AuthenticationInApp {
 
 //    test to login to web app with Selenium webdriver
 
     @Test
-    public void testLogin() {
+    public void testLogin() throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "D:\\devTools\\chromedrivers\\chromedriver.exe");
         ChromeDriver driver = new ChromeDriver();
         driver.get("http://www.localhost:8080/login");
@@ -21,11 +21,14 @@ public class AuthenticationInApp {
 
         driver.findElement(By.name("email")).clear();//clear the input field before entering any value
         driver.findElement(By.name("email")).sendKeys("bob@mail.com");//enter the value of username
+        Thread.sleep(1000);
         driver.findElement(By.name("password")).clear();
         driver.findElement(By.name("password")).sendKeys("bob1975");//enter the value of password
+        Thread.sleep(1000);
         driver.findElement(By.name("Submit")).click();		//click Login button
         System.out.println("Successfully logged in");
-//        driver.quit();
+        Thread.sleep(1000);
+        driver.quit();
 
     }
 }

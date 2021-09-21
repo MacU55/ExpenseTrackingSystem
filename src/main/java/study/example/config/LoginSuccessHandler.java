@@ -39,25 +39,16 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    // метод determineTargetUrl () тестировать на не нужность- удалить.
     protected String determineTargetUrl( Authentication authentication) throws IOException {
         String url ="/login.html?error=true";
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        // Fetch the roles from Authentication object
-//        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//        GrantedAuthority b = (GrantedAuthority) authentication.getAuthorities();
-//        b.getAuthority();
 
-//        String role = (String) authentication.getAuthorities();
         List<String> roles = new ArrayList<>();
         for(GrantedAuthority a : authorities){
             roles.add(a.getAuthority());
         }
-
-
-//        String redirectURL = request.getContextPath();
 
         if (userDetails.getUserLabel().equals("Employee")) {
             url = "/expense_list";

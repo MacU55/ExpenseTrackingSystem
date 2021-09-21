@@ -1,17 +1,14 @@
 package study.example.service;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.web.multipart.MultipartFile;
 import study.example.model.Expense;
 import study.example.repository.ExpenseRepository;
 
-import java.io.*;
-import java.util.Iterator;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,12 +67,7 @@ public class ExpenseServiceTest {
         verify(expenseRepository).deleteById(expense.getId());
         System.out.println("Test of method testDelete() is successful");
     }
-/*
-    @Test
-    public void testFindExpensesByDateAndType() {
-    }
 
- */
     @Test
     public void saveFromSCVToDatabase() {
 

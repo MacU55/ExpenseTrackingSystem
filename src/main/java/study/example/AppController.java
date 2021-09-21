@@ -25,18 +25,17 @@ import study.example.model.*;
 import study.example.repository.UserRepository;
 import study.example.service.CustomUserDetails;
 import study.example.service.ExpenseService;
+import study.example.service.ICurrencyCalc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 @Controller
@@ -380,11 +379,15 @@ public class AppController {
         return "employees_expense_list";
     }
 
-    // handling to back to expense list for selected employee
-//    @RequestMapping(value = "/selectedEmployeeExpenseList/{email}", method = {RequestMethod.POST, RequestMethod.GET})
-//    public String backToEmployeeExpenseList(@PathVariable(name = "email") String email){
-//        re
-//    }
+    @Autowired
+    public ICurrencyCalc currencyCalc;
+
+    @RequestMapping("/currencyCalc")
+    public @ResponseBody
+    Map<String, BigDecimal> getCalc(@RequestParam BigDecimal dollarAmount) {
+
+        return currencyCalc.calcQuantity(dollarAmount);
+    }
 
 }
 

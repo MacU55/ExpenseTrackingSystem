@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.Select;
 
 public class IntegrationTestConnectionToDB {
 
+    private final String EXPENSE_DATE = "05/05/2021";
+
 //    Test to connect database "exptracksystemtest", create record and check it.
 //    Test should be managed by Selenium webdriver.
 
@@ -32,7 +34,7 @@ public class IntegrationTestConnectionToDB {
         Thread.sleep(1000);
         driver.findElement(By.name("description")).sendKeys("bussiness trip");
         Thread.sleep(1000);
-        driver.findElement(By.name("expenseDate")).sendKeys("05/05/2021");
+        driver.findElement(By.name("expenseDate")).sendKeys(EXPENSE_DATE);
         Thread.sleep(1000);
         driver.findElement(By.name("amount")).sendKeys("15.38");
         Thread.sleep(1000);
@@ -40,10 +42,6 @@ public class IntegrationTestConnectionToDB {
          dropDownSelectByText(searchBox, "Education");
         Thread.sleep(1000);
         driver.findElement(By.name("save")).click();
-
-
-
-
         System.out.println("Successfully logged in");
 //        driver.quit();
 

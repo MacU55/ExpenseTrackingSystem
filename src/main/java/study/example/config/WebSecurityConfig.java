@@ -59,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/process_register").permitAll()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/currencyCalc").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // form login

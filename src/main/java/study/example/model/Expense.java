@@ -85,6 +85,20 @@ public class Expense {
         this.user = user;
     }
 
+    public Expense(String description, LocalDate expenseDate,
+                   BigDecimal amount, ExpenseType expenseType, byte[] photoProof,
+                   Long userId, Status status) {
+        this.id = id;
+        this.description = description;
+        this.expenseDate = expenseDate;
+        this.amount = amount;
+        this.expenseType = expenseType;
+        this.photoProof = photoProof;
+        this.userId = userId;
+        this.status = status;
+
+    }
+
     public Long getId() {
         return id;
     }
